@@ -79,14 +79,14 @@ int smp::minimum_time_reachability<typeparams,NUM_DIMENSIONS>
       vertex_t *vertex_ptr = min_cost_vertex;
       while (1) {
 
+	if (vertex_ptr->incoming_edges.size() == 0)
+	  break;
+    
 	edge_t *edge_curr = vertex_ptr->incoming_edges.back();
 
 	trajectory_t *trajectory_curr = edge_curr->trajectory_edge;
 	min_cost_trajectory.list_states.push_front (new state_t(*(vertex_ptr->state)));
 
-	if (vertex_ptr->incoming_edges.size() == 0)
-	  break;
-    
 	for (typename list<state_t*>::iterator it_state = trajectory_curr->list_states.begin();
 	     it_state != trajectory_curr->list_states.end(); it_state++) {
 	  min_cost_trajectory.list_states.push_front (new state_t(**it_state));
