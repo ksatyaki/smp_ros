@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(smp_ros)
 
+set(CMAKE_CXX_STANDARD_REQUIRED 14)
 #set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
 find_package(catkin REQUIRED COMPONENTS
@@ -11,7 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf
 )
 
-find_package(Boost REQUIRED)
+
+find_package(MRPT REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -22,6 +24,7 @@ catkin_package(
 
 include_directories(
   include
+  ${MRPT_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -34,8 +37,12 @@ add_library(smp_ros_external
 add_library(kdtree src/external_libraries/kdtree/kdtree.c)
 
 add_executable(test_rrtstar src/test_rrtstar.cpp)
+add_executable(test_rrtstar_dubins src/test_rrtstar_dubins.cpp)
+add_executable(test_rrtstar_dubins_ros src/test_rrtstar_dubins_ros.cpp)
 
 target_link_libraries(test_rrtstar smp_ros_external kdtree)
+target_link_libraries(test_rrtstar_dubins smp_ros_external kdtree)
+target_link_libraries(test_rrtstar_dubins_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 # install(PROGRAMS
