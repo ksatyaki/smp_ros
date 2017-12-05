@@ -66,7 +66,7 @@ int smp::collision_checker_mc_mrpt<typeparams>::check_collision_state(
     double value = map->computeClearance(x, y, inflation_radius);
 
     if (value < inflation_radius) {
-      return 0;
+      return 1;
     }
   }
 

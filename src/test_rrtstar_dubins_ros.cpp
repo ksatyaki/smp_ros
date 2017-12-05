@@ -28,7 +28,7 @@
     //   heuristics.
 
 #define EXTENSION_LENGTH                                                       \
-  20.0 // Maximum length of an extension. This parameter should ideally
+  60.0 // Maximum length of an extension. This parameter should ideally
        //   be equal longest straight line from the initial state to
        //   anywhere in the state space. In other words, this parameter
        //   should be "sqrt(d) L", where d is the dimensionality of space
@@ -113,6 +113,8 @@ int main(int argn, char *args[]) {
   ros::NodeHandle nh;
 
   ros::Publisher path_pub = nh.advertise<geometry_msgs::PoseArray>("/path", 1);
+  ros::Publisher graph_pub =
+      nh.advertise<geometry_msgs::PoseArray>("/graph", 1);
 
   ros::ServiceClient map_client =
       nh.serviceClient<nav_msgs::GetMap>("static_map");
@@ -186,7 +188,7 @@ int main(int argn, char *args[]) {
   region_goal.center[0] = 6.0;
   region_goal.size[0] = 0.2;
 
-  region_goal.center[1] = 2.0;
+  region_goal.center[1] = 12.0;
   region_goal.size[1] = 0.2;
 
   region_goal.center[2] = 0.0;
@@ -198,7 +200,7 @@ int main(int argn, char *args[]) {
   StateDubins *state_initial = new StateDubins;
 
   state_initial->state_vars[0] = 2.0;
-  state_initial->state_vars[1] = 2.0;
+  state_initial->state_vars[1] = 12.0;
   state_initial->state_vars[2] = 0.0;
 
   if (collision_checker.check_collision_state(state_initial) == 0) {
@@ -207,6 +209,8 @@ int main(int argn, char *args[]) {
     ROS_INFO("Start state is not in collision.");
 
   planner.initialize(state_initial);
+
+  geometry_msgs::PoseArray graph;
 
   ros::Time t = ros::Time::now();
   // 3. RUN THE PLANNER
