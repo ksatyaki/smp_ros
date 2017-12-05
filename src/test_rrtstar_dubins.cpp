@@ -4,8 +4,7 @@
 // SMP HEADER FILES ------
 #include <smp/components/collision_checkers/standard.hpp>
 #include <smp/components/distance_evaluators/kdtree.hpp>
-#include <smp/components/extenders/single_integrator.hpp>
-#include <smp/components/extenders/dubins.h>
+#include <smp/components/extenders/dubins.hpp>
 #include <smp/components/multipurpose/minimum_time_reachability.hpp>
 #include <smp/components/samplers/uniform.hpp>
 
@@ -36,15 +35,15 @@
 
 // SMP TYPE DEFINITIONS -------
 // State, input, vertex_data, and edge_data definitions
-typedef smp::state_single_integrator<NUM_DIMENSIONS> StateSingleIntegrator;
-typedef smp::input_single_integrator input_t;
+typedef smp::state_dubins StateDubins;
+typedef smp::input_dubins InputDubins;
 typedef smp::minimum_time_reachability_vertex_data vertex_data_t;
 typedef smp::minimum_time_reachability_edge_data edge_data_t;
 
 // Create the typeparams structure
 typedef struct _typeparams {
-  typedef StateSingleIntegrator state;
-  typedef input_t input;
+  typedef StateDubins state;
+  typedef InputDubins input;
   typedef vertex_data_t vertex_data;
   typedef edge_data_t edge_data;
 } typeparams;
@@ -56,7 +55,7 @@ typedef smp::trajectory<typeparams> trajectory_t;
 typedef smp::sampler_uniform<typeparams, NUM_DIMENSIONS> UniformSampler;
 typedef smp::distance_evaluator_kdtree<typeparams, NUM_DIMENSIONS>
     KDTreeDistanceEvaluator;
-typedef smp::extender_single_integrator<typeparams, NUM_DIMENSIONS> ExtenderSingleIntegrator;
+typedef smp::extender_dubins<typeparams> ExtenderDubins;
 typedef smp::collision_checker_standard<typeparams, NUM_DIMENSIONS>
     CollisionCheckerStandard;
 typedef smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>
@@ -72,7 +71,7 @@ int main() {
   // 1.a Create the components
   UniformSampler sampler;
   KDTreeDistanceEvaluator distance_evaluator;
-  ExtenderSingleIntegrator extender;
+  ExtenderDubins extender;
   CollisionCheckerStandard collision_checker;
   MinimumTimeReachability min_time_reachability;
 
@@ -108,7 +107,6 @@ int main() {
   //     Nothing to initialize. One could change the kdtree weights.
 
   // 2.c Initialize the extender
-  extender.set_max_length(EXTENSION_LENGTH);
 
   // 2.d Initialize the collision checker
   smp::region<NUM_DIMENSIONS> obstacle_new;
@@ -169,7 +167,7 @@ int main() {
   min_time_reachability.set_goal_region(region_goal);
 
   // 2.f Initialize the planner
-  StateSingleIntegrator *state_initial = new StateSingleIntegrator;
+  StateDubins *state_initial = new StateDubins;
   for (int i = 0; i < NUM_DIMENSIONS; i++) {
     state_initial->state_vars[i] = 0.0;
   }
