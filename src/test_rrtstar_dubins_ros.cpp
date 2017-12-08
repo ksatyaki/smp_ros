@@ -50,6 +50,21 @@ typedef smp::rrtstar<typeparams> RRTStar;
 
 geometry_msgs::PoseArray graph;
 
+// Given a state and goal array, find the distance between them.
+// Angles have a different distance formula. That is why we need this one.
+
+std::array<double, 3> distanceBetweenStates(const std::array<double, 3> &state,
+                                            const std::array<double, 3> &goal) {
+
+  std::array<double, 3> result;
+
+  result[0] = state[0] - goal[0];
+  result[1] = state[1] - goal[1];
+  result[2] = state[2] - goal[2];
+  result[2] = atan2(sin(result[2]), cos(result[2]));
+  return result;
+}
+
 template <typename T> void graphToMsg(smp::vertex<T> *root) {
   geometry_msgs::Pose p;
   p.position.x = root->state->state_vars[0];
@@ -74,12 +89,6 @@ void mrptMapFromROSMsg(
                rosMap.info.origin.position.y +
                    (rosMap.info.height * rosMap.info.resolution),
                rosMap.info.resolution);
-
-  // std::cout << "X: " << map->getXMin() << std::endl
-  //           << "Y: " << map->getYMin() << std::endl
-  //           << "Resolution: " << map->getResolution() << std::endl
-  //           << "XMax: " << map->getXMax() << std::endl
-  //           << "YMax: " << map->getYMax() << std::endl;
 
   for (int h = 0; h < rosMap.info.height; h++) {
     for (int w = 0; w < rosMap.info.width; w++) {
@@ -154,7 +163,7 @@ int main(int argn, char *args[]) {
   //   with side length L, then this parameter should be set to at
   //   least L for rapid and efficient convergence in trajectory space.
   planner.parameters.set_phase(2);
-  planner.parameters.set_gamma(35.0);
+  planner.parameters.set_gamma(std::max(map->getXMax(), map->getYMax()));
 
   planner.parameters.set_dimension(3);
   planner.parameters.set_max_radius(10.0);
@@ -186,15 +195,16 @@ int main(int argn, char *args[]) {
   ROS_INFO("Going to goal: (%lf,%lf)", goalX, goalY);
   smp::region<3> region_goal;
   region_goal.center[0] = goalX;
-  region_goal.size[0] = 1.0;
+  region_goal.size[0] = 0.75;
 
   region_goal.center[1] = goalY;
-  region_goal.size[1] = 1.0;
+  region_goal.size[1] = 0.75;
 
-  region_goal.center[1] = 0.0;
-  region_goal.size[1] = 3.14;
+  region_goal.center[2] = 0.0;
+  region_goal.size[2] = 0.2;
 
   min_time_reachability.set_goal_region(region_goal);
+  min_time_reachability.set_distance_function(distanceBetweenStates);
 
   // 2.f Initialize the planner
   StateDubins *state_initial = new StateDubins;
