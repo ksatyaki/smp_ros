@@ -8,6 +8,17 @@
 #include <smp/components/model_checkers/base.hpp>
 #include <smp/planners/rrtstar.hpp>
 
+template <int NUM_DIMENSIONS>
+std::array<double, NUM_DIMENSIONS>
+smp::default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
+                          const std::array<double, NUM_DIMENSIONS> &goal) {
+  std::array<double, NUM_DIMENSIONS> result;
+  for (int i = 0; i < state.size(); i++) {
+    result[i] = state[i] - goal[i];
+  }
+  return result;
+}
+
 template <class typeparams, int NUM_DIMENSIONS>
 smp::minimum_time_reachability<typeparams,
                                NUM_DIMENSIONS>::minimum_time_reachability() {
@@ -124,35 +135,32 @@ template <class typeparams, int NUM_DIMENSIONS>
 bool smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::reaches_goal(
     vertex_t *vertex_in) {
 
+  std::array<double, NUM_DIMENSIONS> state;
+  std::array<double, NUM_DIMENSIONS> goal;
 
-  // First two dimensions are always the x and y of the position.
-  for (int i = 0; i < 2; i++) {
-    if (fabs(vertex_in->state->state_vars[i] - region_goal.center[i]) >
-        region_goal.size[i]) {
-      return false;
-    }
+  for (int i = 0; i < NUM_DIMENSIONS; i++) {
+    state[i] = vertex_in->state->state_vars[i];
+    goal[i] = region_goal.center[i];
   }
 
-  // Third dimension is assumed to be an angle.
-  // TODO: Make a special indicator for the data so that angles can be processed
-  // differently.
-  if (NUM_DIMENSIONS > 2) {
-    double angle_in = vertex_in->state->state_vars[2];
-    // angle_in = atan2(sin(angle_in), cos(angle_in));
-    double angle_goal = region_goal.center[2];
-    // angle_goal = atan2(sin(angle_goal), cos(angle_goal));
+  std::array<double, NUM_DIMENSIONS> distance;
+  if (distance_function) {
+    distance = distance_function(state, goal);
+  } else {
+    distance = default_distance_function<NUM_DIMENSIONS>(state, goal);
+  }
 
-    double difference = angle_in - angle_goal;
-    difference = fabs(atan2(sin(difference), cos(difference)));
-    if (difference > region_goal.size[2]) {
+  // THIS SHOULD NEVER HAPPEN
+  if (NUM_DIMENSIONS != distance.size()) {
+    std::cout << "FATAL ERROR: There is a mismatch between NUM_DIMENSIONS and "
+                 "the dimensions of the distance. Check distance function!";
+    exit(1);
+  }
+
+  // First two dimensions are always the x and y of the position.
+  for (int i = 0; i < NUM_DIMENSIONS; i++) {
+    if (fabs(distance[i]) > region_goal.size[i]) {
       return false;
-    }
-
-    for (int i = 3; i < NUM_DIMENSIONS; i++) {
-      if (fabs(vertex_in->state->state_vars[i] - region_goal.center[i]) >
-          region_goal.size[i]) {
-        return false;
-      }
     }
   }
 

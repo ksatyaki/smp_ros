@@ -17,6 +17,9 @@
 #include <smp/components/model_checkers/base.h>
 #include <smp/planners/rrtstar.h>
 
+#include <functional>
+#include <array>
+
 namespace smp {
 
 //! Vertex data for minimum-time reachability.
@@ -77,8 +80,14 @@ class minimum_time_reachability : public model_checker_base<typeparams>,
   typedef region<NUM_DIMENSIONS> region_t;
 
   typedef int (*update_func_t)(trajectory_t *);
+  typedef std::function<std::array<double, NUM_DIMENSIONS>(
+      const std::array<double, NUM_DIMENSIONS> &,
+      const std::array<double, NUM_DIMENSIONS> &)>
+      distance_function_t;
 
-  list<update_func_t>
+  distance_function_t distance_function;
+
+  std::list<update_func_t>
       list_update_functions; // A list of functions that will be called in the
   //    event of updating the minimum cost trajectory.
 
@@ -124,7 +133,9 @@ public:
 
   bool reaches_goal(vertex_t *vertex_in);
 
-  
+  inline void set_distance_function(distance_function_t func) {
+    distance_function = func;
+  }
 
   int mc_update_insert_edge(edge_t *edge_in);
 
@@ -175,6 +186,11 @@ public:
    */
   int register_new_update_function(update_func_t update_function);
 };
+
+template<int NUM_DIMENSIONS>
+std::array<double, NUM_DIMENSIONS>
+default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
+                          const std::array<double, NUM_DIMENSIONS> &goal);
 }
 
 #endif
