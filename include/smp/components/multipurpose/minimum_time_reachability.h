@@ -122,6 +122,10 @@ public:
 
   int mc_update_insert_vertex(vertex_t *vertex_in);
 
+  bool reaches_goal(vertex_t *vertex_in);
+
+  
+
   int mc_update_insert_edge(edge_t *edge_in);
 
   int mc_update_delete_vertex(vertex_t *vertex_in);

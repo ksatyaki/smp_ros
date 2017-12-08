@@ -115,17 +115,48 @@ template <class typeparams, int NUM_DIMENSIONS>
 int smp::minimum_time_reachability<
     typeparams, NUM_DIMENSIONS>::mc_update_insert_vertex(vertex_t *vertex_in) {
 
-  for (int i = 0; i < NUM_DIMENSIONS; i++) {
+  vertex_in->data.reaches_goal = reaches_goal(vertex_in);
+
+  return 1;
+}
+
+template <class typeparams, int NUM_DIMENSIONS>
+bool smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::reaches_goal(
+    vertex_t *vertex_in) {
+
+
+  // First two dimensions are always the x and y of the position.
+  for (int i = 0; i < 2; i++) {
     if (fabs(vertex_in->state->state_vars[i] - region_goal.center[i]) >
         region_goal.size[i]) {
-      vertex_in->data.reaches_goal = false;
-      return 1;
+      return false;
     }
   }
 
-  vertex_in->data.reaches_goal = true;
+  // Third dimension is assumed to be an angle.
+  // TODO: Make a special indicator for the data so that angles can be processed
+  // differently.
+  if (NUM_DIMENSIONS > 2) {
+    double angle_in = vertex_in->state->state_vars[2];
+    // angle_in = atan2(sin(angle_in), cos(angle_in));
+    double angle_goal = region_goal.center[2];
+    // angle_goal = atan2(sin(angle_goal), cos(angle_goal));
 
-  return 1;
+    double difference = angle_in - angle_goal;
+    difference = fabs(atan2(sin(difference), cos(difference)));
+    if (difference > region_goal.size[2]) {
+      return false;
+    }
+
+    for (int i = 3; i < NUM_DIMENSIONS; i++) {
+      if (fabs(vertex_in->state->state_vars[i] - region_goal.center[i]) >
+          region_goal.size[i]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
 
 template <class typeparams, int NUM_DIMENSIONS>
