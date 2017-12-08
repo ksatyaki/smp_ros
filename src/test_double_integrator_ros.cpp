@@ -11,8 +11,7 @@
 // SMP HEADER FILES ------
 #include <smp/components/collision_checkers/multiple_circles_mrpt.hpp>
 #include <smp/components/distance_evaluators/kdtree.hpp>
-#include <smp/components/extenders/dubins.hpp>
-#include <smp/components/extenders/single_integrator.hpp>
+#include <smp/components/extenders/double_integrator.hpp>
 #include <smp/components/multipurpose/minimum_time_reachability.hpp>
 #include <smp/components/samplers/uniform.hpp>
 #include <smp/planners/rrtstar.hpp>
@@ -22,15 +21,15 @@
 
 // SMP TYPE DEFINITIONS -------
 // State, input, vertex_data, and edge_data definitions
-typedef smp::state_dubins StateDubins;
-typedef smp::input_dubins InputDubins;
+typedef smp::state_double_integrator<2> StateDoubleIntegrator;
+typedef smp::input_double_integrator<2> InputDoubleIntegrator;
 typedef smp::minimum_time_reachability_vertex_data vertex_data_t;
 typedef smp::minimum_time_reachability_edge_data edge_data_t;
 
 // Create the typeparams structure
 typedef struct _typeparams {
-  typedef StateDubins state;
-  typedef InputDubins input;
+  typedef StateDoubleIntegrator state;
+  typedef InputDoubleIntegrator input;
   typedef vertex_data_t vertex_data;
   typedef edge_data_t edge_data;
 } typeparams;
@@ -39,11 +38,11 @@ typedef struct _typeparams {
 typedef smp::trajectory<typeparams> trajectory_t;
 
 // Define all planner component types
-typedef smp::sampler_uniform<typeparams, 3> UniformSampler;
-typedef smp::distance_evaluator_kdtree<typeparams, 3> KDTreeDistanceEvaluator;
-typedef smp::extender_dubins<typeparams> ExtenderDubins;
+typedef smp::sampler_uniform<typeparams, 4> UniformSampler;
+typedef smp::distance_evaluator_kdtree<typeparams, 4> KDTreeDistanceEvaluator;
+typedef smp::extender_double_integrator<typeparams, 2> ExtenderDoubleIntegrator;
 typedef smp::collision_checker_mc_mrpt<typeparams> CollisionCheckerMCMRPT;
-typedef smp::minimum_time_reachability<typeparams, 3> MinimumTimeReachability;
+typedef smp::minimum_time_reachability<typeparams, 4> MinimumTimeReachability;
 
 // Define all algorithm types
 typedef smp::rrtstar<typeparams> RRTStar;
@@ -125,18 +124,18 @@ int main(int argn, char *args[]) {
 
   std::shared_ptr<mrpt::math::CPolygon> footprint =
       std::make_shared<mrpt::math::CPolygon>();
-  footprint->AddVertex(0.25, 0.25);
-  footprint->AddVertex(0.25, -0.25);
-  footprint->AddVertex(-0.25, 0.25);
-  footprint->AddVertex(-0.25, -0.25);
+  footprint->AddVertex(0.1, 0.1);
+  footprint->AddVertex(0.1, -0.1);
+  footprint->AddVertex(-0.1, 0.1);
+  footprint->AddVertex(-0.1, -0.1);
 
   // 1. CREATE PLANNING OBJECTS
 
   // 1.a Create the components
   UniformSampler sampler;
   KDTreeDistanceEvaluator distance_evaluator;
-  ExtenderDubins extender;
-  CollisionCheckerMCMRPT collision_checker(map, 0.15, footprint);
+  ExtenderDoubleIntegrator extender;
+  CollisionCheckerMCMRPT collision_checker(map, 0.05, footprint);
   MinimumTimeReachability min_time_reachability;
 
   // 1.b Create the planner algorithm -- Note that the min_time_reachability
@@ -156,12 +155,12 @@ int main(int argn, char *args[]) {
   planner.parameters.set_phase(2);
   planner.parameters.set_gamma(35.0);
 
-  planner.parameters.set_dimension(3);
+  planner.parameters.set_dimension(4);
   planner.parameters.set_max_radius(10.0);
 
   // 2. INITALIZE PLANNING OBJECTS
   // 2.a Initialize the sampler
-  smp::region<3> sampler_support;
+  smp::region<4> sampler_support;
 
   sampler_support.center[0] = map->getXMax() / 2.0;
   sampler_support.size[0] = map->getXMax();
@@ -171,6 +170,9 @@ int main(int argn, char *args[]) {
 
   sampler_support.center[2] = 0.0;
   sampler_support.size[2] = 3.14;
+
+  sampler_support.center[3] = 0.0;
+  sampler_support.size[3] = 1.0;
 
   sampler.set_support(sampler_support);
 
@@ -184,24 +186,28 @@ int main(int argn, char *args[]) {
   ros::param::param("goal_y", goalY, 2.0);
 
   ROS_INFO("Going to goal: (%lf,%lf)", goalX, goalY);
-  smp::region<3> region_goal;
+  smp::region<4> region_goal;
   region_goal.center[0] = goalX;
-  region_goal.size[0] = 1.0;
+  region_goal.size[0] = 2.0;
 
   region_goal.center[1] = goalY;
-  region_goal.size[1] = 1.0;
+  region_goal.size[1] = 2.0;
 
-  region_goal.center[1] = 0.0;
-  region_goal.size[1] = 3.14;
+  region_goal.center[2] = 0.0;
+  region_goal.size[2] = 3.14;
+
+  region_goal.center[3] = 0.0;
+  region_goal.size[3] = 1.0;
 
   min_time_reachability.set_goal_region(region_goal);
 
   // 2.f Initialize the planner
-  StateDubins *state_initial = new StateDubins;
+  StateDoubleIntegrator *state_initial = new StateDoubleIntegrator;
 
   state_initial->state_vars[0] = 3.0;
   state_initial->state_vars[1] = 2.0;
   state_initial->state_vars[2] = 0.0;
+  state_initial->state_vars[3] = 0.0;
 
   if (collision_checker.check_collision_state(state_initial) == 0) {
     ROS_INFO("Start state is in collision.");
@@ -230,7 +236,7 @@ int main(int argn, char *args[]) {
     graphToMsg(planner.get_root_vertex());
     graph.header.stamp = ros::Time::now();
 
-    graph_pub.publish(graph);
+    //graph_pub.publish(graph);
     ROS_INFO_THROTTLE(1.0, "Iteration : %d", i);
   }
 

@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(smp_ros)
 
-set(CMAKE_CXX_STANDARD_REQUIRED 14)
-#set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_CXX_STANDARD 11)
+
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
@@ -12,8 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf
 )
 
-
 find_package(MRPT REQUIRED)
+find_package(Boost REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -39,10 +38,13 @@ add_library(kdtree src/external_libraries/kdtree/kdtree.c)
 add_executable(test_rrtstar src/test_rrtstar.cpp)
 add_executable(test_rrtstar_dubins src/test_rrtstar_dubins.cpp)
 add_executable(test_rrtstar_dubins_ros src/test_rrtstar_dubins_ros.cpp)
+add_executable(test_double_integrator_ros src/test_double_integrator_ros.cpp)
 
 target_link_libraries(test_rrtstar smp_ros_external kdtree)
 target_link_libraries(test_rrtstar_dubins smp_ros_external kdtree)
 target_link_libraries(test_rrtstar_dubins_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+target_link_libraries(test_double_integrator_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 # install(PROGRAMS
