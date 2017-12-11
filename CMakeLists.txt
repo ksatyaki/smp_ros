@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   tf
+  nav_core
 )
 
 find_package(MRPT REQUIRED)
@@ -17,7 +18,7 @@ find_package(Boost REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES smp_ros_external
-  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf
+  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core
   DEPENDS Boost
 )
 
@@ -44,6 +45,10 @@ target_link_libraries(test_rrtstar smp_ros_external kdtree)
 target_link_libraries(test_rrtstar_dubins smp_ros_external kdtree)
 target_link_libraries(test_rrtstar_dubins_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 target_link_libraries(test_double_integrator_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+
+
+add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
+target_link_libraries(rrtstar_dubins_global_planner smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination

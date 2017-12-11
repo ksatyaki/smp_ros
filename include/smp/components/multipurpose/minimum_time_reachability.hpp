@@ -218,17 +218,39 @@ double smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::
     evaluate_cost_trajectory(state_t *state_initial_in,
                              trajectory_t *trajectory_in,
                              state_t *state_final_in) {
-
   double total_time = 0.0;
+  double total_distance = 0.0;
+  //state_t* state_prev = state_initial_in;
+
+  //typename list<state_t *>::iterator iter_state = trajectory_in->list_states.begin();
   for (typename list<input_t *>::iterator iter =
            trajectory_in->list_inputs.begin();
        iter != trajectory_in->list_inputs.end(); iter++) {
-
     input_t *input_curr = *iter;
+    //state_t* state_curr = *iter_state;
+
+    // std::array<double, NUM_DIMENSIONS> s_curr, s_prev;
+    // for( int i =0 ; i < NUM_DIMENSIONS; i++) {
+    //   s_curr[i] = state_curr->state_vars[i];
+    //   s_prev[i] = state_prev->state_vars[i];
+    // }
+
+    // std::array<double, NUM_DIMENSIONS> p = distance_function(s_curr, s_prev);
+    // double this_distance = 0.0;
+    // for(int i = 0; i < NUM_DIMENSIONS ; i ++) {
+    //   this_distance += p[i] * p[i];
+    // }
+    // this_distance = sqrt(this_distance);
+
+    // total_distance += this_distance;
+    // state_prev = *iter_state;
+    // iter_state++;
+
     total_time += (*input_curr)[0];
   }
 
   return total_time;
+  //return total_distance;
 }
 
 template <class typeparams, int NUM_DIMENSIONS>

@@ -134,10 +134,10 @@ int main(int argn, char *args[]) {
 
   std::shared_ptr<mrpt::math::CPolygon> footprint =
       std::make_shared<mrpt::math::CPolygon>();
-  footprint->AddVertex(0.25, 0.25);
-  footprint->AddVertex(0.25, -0.25);
-  footprint->AddVertex(-0.25, 0.25);
-  footprint->AddVertex(-0.25, -0.25);
+  footprint->AddVertex(0.25, 0.125);
+  footprint->AddVertex(0.25, -0.125);
+  footprint->AddVertex(-0.25, 0.125);
+  footprint->AddVertex(-0.25, -0.125);
 
   // 1. CREATE PLANNING OBJECTS
 
