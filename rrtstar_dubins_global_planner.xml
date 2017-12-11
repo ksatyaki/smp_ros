@@ -1,0 +1,5 @@
+<library path="lib/librrtstar_dubins_global_planner">
+  <class name="smp_ros/RRTStarDubinsGlobalPlanner" type="smp_ros::RRTStarDubinsGlobalPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>Global Planner plugin using SMP motion planning library. It uses RRTStar and Dubin's car vehicle dynamics.</description>
+  </class>
+</library>
