@@ -2,27 +2,32 @@
 <launch>
   <param name="use_sim_time" value="true"/>
   <!-- Node 1: Stage -->
-  <node name="stage_ros" type="stageros" pkg="stage_ros" args="$(find smp_ros)/worlds/test_world.world"/>
+  <node name="stage_ros" type="stageros" pkg="stage_ros" args="$(find smp_ros)/worlds/11world.world"/>
 
   <!-- Node 2: Map server -->
-  <node name="map_server" type="map_server" pkg="map_server" args="$(find smp_ros)/maps/map.yaml"/>
+  <node name="map_server" type="map_server" pkg="map_server" args="$(find smp_ros)/maps/11world.yaml"/>
 
   <!-- Node 3: MCL -->
   <!-- WARNING: Using default parameters -->
   <node name="mcl" type="amcl" pkg="amcl">
     <remap from="scan" to="base_scan" />
+    <param name="odom_model_type" value="car" />
   </node>
 
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
   <!-- Node 4: MoveBase -->
   <arg name="laser_topic" default="base_scan" />
 
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" launch-prefix="$(arg launch_prefix)">
     <rosparam file="$(find smp_ros)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find smp_ros)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
     <rosparam file="$(find smp_ros)/param/local_costmap_params.yaml" command="load" />   
     <rosparam file="$(find smp_ros)/param/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find smp_ros)/param/move_base_params.yaml" command="load" />
-    <rosparam file="$(find smp_ros)/param/navfn_params.yaml" command="load" />
+    <rosparam file="$(find smp_ros)/param/teb_params.yaml" command="load" />
     
     <!-- reset frame_id parameters using user input data -->
     <param name="global_costmap/global_frame" value="map"/>
@@ -31,8 +36,8 @@
     <param name="local_costmap/robot_base_frame" value="base_link"/>
 
     <remap from="scan" to="$(arg laser_topic)"/>
-</node>
+  </node>
 
   <!-- Node 4: Rviz -->
-  <node name="rviz" type="rqt_rviz" pkg="rqt_rviz" args="-d $(find smp_ros)/launch/rviz.rviz"/>
+  <node name="rviz" type="rviz" pkg="rviz" args="-d $(find smp_ros)/launch/rviz.rviz"/>
 </launch>
