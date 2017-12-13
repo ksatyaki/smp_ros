@@ -61,12 +61,12 @@ class RRTStarDubinsGlobalPlanner : public nav_core::BaseGlobalPlanner {
 
 private:
   ros::NodeHandle nh;
-  RRTStar planner;
-  UniformSampler sampler;
-  KDTreeDistanceEvaluator distance_evaluator;
-  ExtenderDubins extender;
-  CollisionCheckerMCMRPT collision_checker;
-  MinimumTimeReachability min_time_reachability;
+  std::shared_ptr<RRTStar> planner;
+  std::shared_ptr<UniformSampler> sampler;
+  std::shared_ptr<KDTreeDistanceEvaluator> distance_evaluator;
+  std::shared_ptr<ExtenderDubins> extender;
+  std::shared_ptr<CollisionCheckerMCMRPT> collision_checker;
+  std::shared_ptr<MinimumTimeReachability> min_time_reachability;
 
   ros::Publisher graph_pub;
 

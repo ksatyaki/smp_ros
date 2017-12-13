@@ -49,27 +49,26 @@ int smp::collision_checker_mc_mrpt<typeparams>::check_collision_state(
     return 1;
   }
 
-  // std::cout << "State: (" << state_in->state_vars[0] << ","
-  //           << state_in->state_vars[1] << "," << state_in->state_vars[2]
-  //           << ")\n";
-
   std::vector<double> xCoords, yCoords;
   robot_footprint->getAllVertices(xCoords, yCoords);
 
-  double x = state_in->state_vars[0];
-  double y = state_in->state_vars[1];
   double theta = state_in->state_vars[2];
 
   for (size_t i = 0; i < xCoords.size(); i++) {
-    x += xCoords[i] * cos(theta) - yCoords[i] * sin(theta);
-    y += xCoords[i] * sin(theta) + yCoords[i] * cos(theta);
+
+    double x = xCoords[i] * cos(theta) - yCoords[i] * sin(theta);
+    double y = xCoords[i] * sin(theta) + yCoords[i] * cos(theta);
+
+    x = state_in->state_vars[0];
+    y = state_in->state_vars[1];
+
     double value = map->computeClearance(x, y, inflation_radius);
+    // std::cout << "State: (" << x << "," << y << "," << theta << ")\n";
 
     if (value < inflation_radius) {
       return 0;
     }
   }
-
   return 1;
 }
 
@@ -92,8 +91,6 @@ int smp::collision_checker_mc_mrpt<typeparams>::check_collision_trajectory(
 
   if (trajectory_in->list_states.size() == 0)
     return 1;
-
-  typename list<state_t *>::iterator iter = trajectory_in->list_states.begin();
 
   // This might be a problem with very thin obstacles. We ignore that for now.
   for (const auto &iter : trajectory_in->list_states) {
