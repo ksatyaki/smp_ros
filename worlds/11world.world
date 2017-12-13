@@ -77,7 +77,7 @@ floorplan
 
 # throwcar like robot gazebo in a robot
 erratic(
-  pose [ 0.0 0.0 0 0.00 ]
+  pose [ 0.0 0.0 0 90.00 ]
   name "MapperBot"
   color "green"
 )

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(smp_ros)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE Debug)
+set(MRPT_DONT_USE_DBG_LIBS 1)
 
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs

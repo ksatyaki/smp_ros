@@ -108,3 +108,10 @@ template <typename T> void graphToMsg(ros::NodeHandle& nh, geometry_msgs::PoseAr
     graphToMsg(nh, graph, another_root->vertex_dst);
   }
 }
+
+template <typename T> void freeGraph(smp::vertex<T> *root) {
+  for (auto another_root : root->outgoing_edges) {
+    freeGraph(another_root->vertex_dst);
+  }
+  delete root;
+}

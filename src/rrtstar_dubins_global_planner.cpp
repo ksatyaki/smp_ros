@@ -47,11 +47,23 @@ void RRTStarDubinsGlobalPlanner::initialize(
   map = std::make_shared<mrpt::maps::COccupancyGridMap2D>();
   mrptMapFromROSMsg(map, costmap_ros->getCostmap());
 
+  std::vector<geometry_msgs::Point> footprint_pt = costmap_ros->getRobotFootprint();
   footprint = std::make_shared<mrpt::math::CPolygon>();
-  footprint->AddVertex(0.25, 0.125);
-  footprint->AddVertex(0.25, -0.125);
-  footprint->AddVertex(-0.25, 0.125);
-  footprint->AddVertex(-0.25, -0.125);
+
+  for(const auto& point : footprint_pt){
+    footprint->AddVertex(point.x, point.y);
+  }
+
+  if(footprint_pt.size() != 4) {
+    ROS_WARN("Footprint wasn't a polygon. Setting to default values.");
+    footprint->AddVertex(0.25, 0.125);
+    footprint->AddVertex(0.25, -0.125);
+    footprint->AddVertex(-0.25, 0.125);
+    footprint->AddVertex(-0.25, -0.125);
+  }
+  else {
+    ROS_INFO("RRTStarDubinsGlobalPlanner got a polygon footprint.");
+  }
 
   // TODO: Inflation radius and footprint must be configurable.
   // sampler can't be std::shared_ptr
@@ -118,7 +130,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
   min_time_reachability->set_goal_region(region_goal);
   min_time_reachability->set_distance_function(distanceBetweenStates);
 
-  StateDubins *state_initial = new StateDubins;
+  StateDubins* state_initial = new StateDubins;
 
   state_initial->state_vars[0] = start.pose.position.x;
   state_initial->state_vars[1] = start.pose.position.y;

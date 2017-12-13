@@ -168,7 +168,6 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
             if ((exact_connection == 1) &&
                 (check_extended_trajectory_for_collision(
                      vertex_curr->state, trajectory_curr) == 1)) {
-              // std::cout << "(NO Collision)\n";
               // Calculate the cost to get to the extended state with the new
               // trajectory
               double cost_trajectory_from_curr =

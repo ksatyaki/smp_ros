@@ -60,7 +60,8 @@ template <class typeparams> int smp::planner<typeparams>::initialize() {
   for (typename list<vertex_t *>::iterator iter = list_vertices.begin();
        iter != list_vertices.end(); iter++) {
     vertex_t *vertex_curr = *iter;
-    delete vertex_curr;
+    if(vertex_curr)
+      delete vertex_curr;
   }
 
   return 1;
