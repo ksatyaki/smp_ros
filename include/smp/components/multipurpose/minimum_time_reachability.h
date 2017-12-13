@@ -8,17 +8,15 @@
   the vertices as well as the type of the data that is stored in the edges as an
   argument.
 */
-
-#ifndef _SMP_MINIMUM_TIME_REACHABILITY_H_
-#define _SMP_MINIMUM_TIME_REACHABILITY_H_
+#pragma once
 
 #include <smp/common/region.h>
 #include <smp/components/cost_evaluators/base.h>
 #include <smp/components/model_checkers/base.h>
 #include <smp/planners/rrtstar.h>
 
-#include <functional>
 #include <array>
+#include <functional>
 
 namespace smp {
 
@@ -187,10 +185,8 @@ public:
   int register_new_update_function(update_func_t update_function);
 };
 
-template<int NUM_DIMENSIONS>
+template <int NUM_DIMENSIONS>
 std::array<double, NUM_DIMENSIONS>
 default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
                           const std::array<double, NUM_DIMENSIONS> &goal);
 }
-
-#endif
