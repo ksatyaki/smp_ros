@@ -27,14 +27,14 @@ void mrptMapFromROSMsg(
     for (int w = 0; w < rosMap->getSizeInCellsX(); w++) {
       float value = -1.0f;
       const uint8_t &occ_map_value = rosMap->getCost(w, h);
-      if (occ_map_value == 255 || occ_map_value == 254 || occ_map_value == 253)
+      if (occ_map_value == 255 || occ_map_value == 254)
         value = 0.0f;
       else
         value = 1.0f;
       map->setCell(w, h, value);
     }
   }
-  // [DEBUG] */ map->saveAsBitmapFile("/home/chitt/remap.png");
+  /* [DEBUG] */ map->saveAsBitmapFile("/home/chitt/remap.png");
 }
 
 namespace smp_ros {
@@ -42,67 +42,61 @@ namespace smp_ros {
 void RRTStarDubinsGlobalPlanner::initialize(
     std::string name, costmap_2d::Costmap2DROS *costmap_ros) {
 
+  // TODO: All parameters must be configurable.
   graph_pub = nh.advertise<geometry_msgs::PoseArray>("/graph", 100);
 
   map = std::make_shared<mrpt::maps::COccupancyGridMap2D>();
   mrptMapFromROSMsg(map, costmap_ros->getCostmap());
 
-  std::vector<geometry_msgs::Point> footprint_pt = costmap_ros->getRobotFootprint();
+  std::vector<geometry_msgs::Point> footprint_pt =
+      costmap_ros->getRobotFootprint();
   footprint = std::make_shared<mrpt::math::CPolygon>();
 
-  for(const auto& point : footprint_pt){
+  for (const auto &point : footprint_pt) {
     footprint->AddVertex(point.x, point.y);
   }
 
-  if(footprint_pt.size() != 4) {
+  if (footprint_pt.size() != 4) {
     ROS_WARN("Footprint wasn't a polygon. Setting to default values.");
     footprint->AddVertex(0.25, 0.125);
     footprint->AddVertex(0.25, -0.125);
     footprint->AddVertex(-0.25, 0.125);
     footprint->AddVertex(-0.25, -0.125);
-  }
-  else {
+  } else {
     ROS_INFO("RRTStarDubinsGlobalPlanner got a polygon footprint.");
   }
 
   // TODO: Inflation radius and footprint must be configurable.
   // sampler can't be std::shared_ptr
-  sampler = std::make_shared<UniformSampler>();
-  distance_evaluator = std::make_shared<KDTreeDistanceEvaluator>();
-  extender = std::make_shared<ExtenderDubins>();
   collision_checker = std::shared_ptr<CollisionCheckerMCMRPT>(
       new CollisionCheckerMCMRPT(map, 0.15, footprint));
-  min_time_reachability = std::make_shared<MinimumTimeReachability>();
-
-  // TODO: All parameters must be configurable.
-  planner = std::make_shared<RRTStar>(
-      *sampler, *distance_evaluator, *extender, *collision_checker,
-      *min_time_reachability, *min_time_reachability);
-
-  planner->parameters.set_phase(2);
-  planner->parameters.set_gamma(std::max(map->getXMax(), map->getYMax()));
-  planner->parameters.set_dimension(3);
-  planner->parameters.set_max_radius(10.0);
 
   // Sampler support should also be configurable.
   smp::region<3> sampler_support;
-
   sampler_support.center[0] = 0.0;
   sampler_support.size[0] = 10.0;
-
   sampler_support.center[1] = 0.0;
   sampler_support.size[1] = 10.0;
-
   sampler_support.center[2] = 0.0;
   sampler_support.size[2] = 3.14;
-
-  sampler->set_support(sampler_support);
+  sampler.set_support(sampler_support);
 }
 
 bool RRTStarDubinsGlobalPlanner::makePlan(
     const geometry_msgs::PoseStamped &start,
     const geometry_msgs::PoseStamped &goal,
     std::vector<geometry_msgs::PoseStamped> &plan) {
+
+  KDTreeDistanceEvaluator distance_evaluator;
+  MinimumTimeReachability min_time_reachability;
+
+  RRTStar planner(sampler, distance_evaluator, extender, *collision_checker,
+                  min_time_reachability, min_time_reachability);
+
+  planner.parameters.set_phase(2);
+  planner.parameters.set_gamma(std::max(map->getXMax(), map->getYMax()));
+  planner.parameters.set_dimension(3);
+  planner.parameters.set_max_radius(10.0);
 
   ROS_INFO("Start: (%lf,%lf,%lf degrees)", start.pose.position.x,
            start.pose.position.y,
@@ -127,10 +121,10 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
       2 * atan2(goal.pose.orientation.z, goal.pose.orientation.w);
   region_goal.size[2] = 0.2;
 
-  min_time_reachability->set_goal_region(region_goal);
-  min_time_reachability->set_distance_function(distanceBetweenStates);
+  min_time_reachability.set_goal_region(region_goal);
+  min_time_reachability.set_distance_function(distanceBetweenStates);
 
-  StateDubins* state_initial = new StateDubins;
+  StateDubins *state_initial = new StateDubins;
 
   state_initial->state_vars[0] = start.pose.position.x;
   state_initial->state_vars[1] = start.pose.position.y;
@@ -143,7 +137,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
   } else
     ROS_INFO("Start state is not in collision.");
 
-  planner->initialize(state_initial);
+  planner.initialize(state_initial);
 
   ros::Time t = ros::Time::now();
   // 3. RUN THE PLANNER
@@ -158,11 +152,11 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
       break;
     }
 
-    planner->iteration();
+    planner.iteration();
 
     graph.poses.clear();
 
-    graphToMsg(nh, graph, planner->get_root_vertex());
+    graphToMsg(nh, graph, planner.get_root_vertex());
     graph.header.stamp = ros::Time::now();
 
     graph_pub.publish(graph);
@@ -170,7 +164,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
   }
 
   trajectory_t trajectory_final;
-  min_time_reachability->get_solution(trajectory_final);
+  min_time_reachability.get_solution(trajectory_final);
 
   geometry_msgs::PoseArray path;
 

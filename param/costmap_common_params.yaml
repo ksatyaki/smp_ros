@@ -22,21 +22,22 @@ obstacle_layer:
   z_resolution: 0.2
   z_voxels: 2
   publish_voxel_map: false
-  observation_sources:  scan
+  observation_sources: scan
   scan:
     data_type: LaserScan
-    topic: scan
+    topic: base_scan
     marking: true
     clearing: true
-    min_obstacle_height: 0.25
-    max_obstacle_height: 0.35
+    min_obstacle_height: 0.10
+    max_obstacle_height: 1.00
   # for debugging only, let's you see the entire voxel grid
 
 #cost_scaling_factor and inflation_radius were now moved to the inflation_layer ns
 inflation_layer:
-  enabled:              false
-#  cost_scaling_factor:  5.0  # exponential rate at which the obstacle cost drops off (default: 10)
-#  inflation_radius:     0.05  # max. distance from an obstacle at which costs are incurred for planning paths.
+  enabled:              true
+  cost_scaling_factor:  5.0  # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:     0.15  # max. distance from an obstacle at which costs are incurred for planning paths.
 
 static_layer:
   enabled: true
+  topic: "/map"
