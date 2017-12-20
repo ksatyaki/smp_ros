@@ -8,7 +8,6 @@
 
 #include <list>
 
-using namespace std;
 
 namespace smp {
 
@@ -27,10 +26,10 @@ template <class typeparams> class trajectory {
 
 public:
   //! A list of the states in the trajectory.
-  list<state_t *> list_states;
+  std::list<state_t *> list_states;
 
   //! A list of the inputs in the trajectory.
-  list<input_t *> list_inputs;
+  std::list<input_t *> list_inputs;
 
   trajectory();
   ~trajectory();

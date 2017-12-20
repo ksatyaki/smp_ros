@@ -16,24 +16,22 @@
 #define TRUST_ME 0
 #define VERBOSE_DBG 0
 
-using namespace std;
-
 class CT_vertex;
 class MS_state;
 
-typedef set<CT_vertex *> vertexSet;
-typedef set<CT_vertex *>::iterator vertexSet_it;
-typedef list<CT_vertex *> vertexList;
-typedef list<CT_vertex *>::iterator vertexList_it;
-typedef list<CT_vertex *>::reverse_iterator vertexList_rit;
-typedef set<MS_state*> stateSet;
-typedef set<MS_state*>::iterator stateSet_it;
-typedef map<MS_state*, stateSet> stateMap;
-typedef map<MS_state*, vertexSet> stateVertexSetMap;
-typedef list<MS_state*> stateList;
-typedef list<MS_state*>::iterator stateList_it;
-typedef set<vertexList*> vertexListSet; 
-typedef set<vertexList*>::iterator vertexListSet_it;
+typedef std::set<CT_vertex *> vertexSet;
+typedef std::set<CT_vertex *>::iterator vertexSet_it;
+typedef std::list<CT_vertex *> vertexList;
+typedef std::list<CT_vertex *>::iterator vertexList_it;
+typedef std::list<CT_vertex *>::reverse_iterator vertexList_rit;
+typedef std::set<MS_state*> stateSet;
+typedef std::set<MS_state*>::iterator stateSet_it;
+typedef std::map<MS_state*, stateSet> stateMap;
+typedef std::map<MS_state*, vertexSet> stateVertexSetMap;
+typedef std::list<MS_state*> stateList;
+typedef std::list<MS_state*>::iterator stateList_it;
+typedef std::set<vertexList*> vertexListSet; 
+typedef std::set<vertexList*>::iterator vertexListSet_it;
 
 
 typedef struct _saElement_t {

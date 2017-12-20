@@ -85,7 +85,7 @@ public:
 
   int extend(state_t *state_from_in, state_t *state_towards_in,
              int *exact_connection_out, trajectory_t *trajectory_out,
-             list<state_t *> *intermediate_vertices_out);
+             std::list<state_t *> *intermediate_vertices_out);
 
   /**
    * \brief Sets the maximum length of the trajectory returned by the algorithm.

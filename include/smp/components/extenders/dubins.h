@@ -16,8 +16,6 @@
 
 #include <list>
 
-using namespace std;
-
 namespace smp {
 
 //! Implementation of the state data structure for the Dubins car dynamics
@@ -62,12 +60,12 @@ class extender_dubins : public extender_base<typeparams> {
 
   int extend_dubins_spheres(double x_s1, double y_s1, double t_s1, double x_s2,
                             double y_s2, double t_s2, int comb_no,
-                            int *fully_extends, list<state_t *> *list_states,
-                            list<input_t *> *list_inputs);
+                            int *fully_extends, std::list<state_t *> *list_states,
+                            std::list<input_t *> *list_inputs);
 
   double extend_dubins_all(state_t *state_ini, state_t *state_fin,
-                           int *fully_extends, list<state_t *> *list_states_out,
-                           list<input_t *> *list_inputs_out);
+                           int *fully_extends, std::list<state_t *> *list_states_out,
+                           std::list<input_t *> *list_inputs_out);
 
 public:
   extender_dubins();
@@ -83,7 +81,7 @@ public:
 
   int extend(state_t *state_from_in, state_t *state_towards_in,
              int *exact_connection_out, trajectory_t *trajectory_out,
-             list<state_t *> *intermediate_vertices_out);
+             std::list<state_t *> *intermediate_vertices_out);
 };
 }
 

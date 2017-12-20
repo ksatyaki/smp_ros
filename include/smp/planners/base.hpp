@@ -15,8 +15,6 @@
 #include <smp/components/model_checkers/base.hpp>
 #include <smp/components/samplers/base.hpp>
 
-using namespace std;
-
 template <class typeparams> smp::planner<typeparams>::planner() {
 
   list_vertices.clear();
@@ -46,10 +44,10 @@ template <class typeparams> smp::planner<typeparams>::~planner() {
 template <class typeparams> int smp::planner<typeparams>::initialize() {
 
   // Delete all edges and vertices
-  for (typename list<vertex_t *>::iterator iter_vertex = list_vertices.begin();
+  for (typename std::list<vertex_t *>::iterator iter_vertex = list_vertices.begin();
        iter_vertex != list_vertices.end(); iter_vertex++) {
     vertex_t *vertex_curr = *iter_vertex;
-    for (typename list<edge_t *>::iterator iter_edge =
+    for (typename std::list<edge_t *>::iterator iter_edge =
              vertex_curr->outgoing_edges.begin();
          iter_edge != vertex_curr->outgoing_edges.end(); iter_edge++) {
       edge_t *edge_curr = *iter_edge;
@@ -57,7 +55,7 @@ template <class typeparams> int smp::planner<typeparams>::initialize() {
     }
   }
 
-  for (typename list<vertex_t *>::iterator iter = list_vertices.begin();
+  for (typename std::list<vertex_t *>::iterator iter = list_vertices.begin();
        iter != list_vertices.end(); iter++) {
     vertex_t *vertex_curr = *iter;
     if (vertex_curr)
@@ -89,7 +87,7 @@ int smp::planner<typeparams>::insert_vertex(vertex_t *vertex_in) {
   model_checker.mc_update_insert_vertex(vertex_in);
 
   // Run all the update functions
-  for (typename list<vertex_update_func_t>::iterator it_func =
+  for (typename std::list<vertex_update_func_t>::iterator it_func =
            list_update_insert_vertex_functions.begin();
        it_func != list_update_insert_vertex_functions.end(); it_func++) {
 
@@ -110,16 +108,16 @@ int smp::planner<typeparams>::delete_vertex(vertex_t *vertex_in) {
   model_checker.mc_update_delete_vertex(vertex_in);
 
   // Run all the update functions
-  for (typename list<vertex_update_func_t>::iterator it_func =
+  for (typename std::list<vertex_update_func_t>::iterator it_func =
            list_update_delete_vertex_functions.begin();
        it_func != list_update_delete_vertex_functions.end(); it_func++) {
     (*it_func)(vertex_in);
   }
 
-  list<edge_t *> edge_list;
+  std::list<edge_t *> edge_list;
 
   edge_list = vertex_in->incoming_edges;
-  for (typename list<edge_t *>::iterator it_edge = edge_list.begin();
+  for (typename std::list<edge_t *>::iterator it_edge = edge_list.begin();
        it_edge != edge_list.end(); it_edge++) {
     edge_t *edge_curr = *it_edge;
     this->delete_edge(edge_curr);
@@ -127,7 +125,7 @@ int smp::planner<typeparams>::delete_vertex(vertex_t *vertex_in) {
   edge_list.clear();
 
   edge_list = vertex_in->outgoing_edges;
-  for (typename list<edge_t *>::iterator it_edge = edge_list.begin();
+  for (typename std::list<edge_t *>::iterator it_edge = edge_list.begin();
        it_edge != edge_list.end(); it_edge++) {
     edge_t *edge_curr = *it_edge;
     this->delete_edge(edge_curr);
@@ -136,9 +134,9 @@ int smp::planner<typeparams>::delete_vertex(vertex_t *vertex_in) {
 
 #if _SMP_FAST_VERTEX_DELETE
 
-  typename list<vertex_t *>::iterator it_vertex_begin =
+  typename std::list<vertex_t *>::iterator it_vertex_begin =
       vertex_in->it_vertex_list;
-  typename list<vertex_t *>::iterator it_vertex_end = it_vertex_begin;
+  typename std::list<vertex_t *>::iterator it_vertex_end = it_vertex_begin;
   it_vertex_end++;
   list_vertices.erase(it_vertex_begin, it_vertex_end);
 
@@ -175,7 +173,7 @@ int smp::planner<typeparams>::insert_edge(vertex_t *vertex_src_in,
   model_checker.mc_update_insert_edge(edge_in);
 
   // Run all the update functions
-  for (typename list<edge_update_func_t>::iterator it_func =
+  for (typename std::list<edge_update_func_t>::iterator it_func =
            list_update_insert_edge_functions.begin();
        it_func != list_update_insert_edge_functions.end(); it_func++) {
     (*it_func)(edge_in);
@@ -195,7 +193,7 @@ int smp::planner<typeparams>::delete_edge(edge_t *edge_in) {
   model_checker.mc_update_delete_edge(edge_in);
 
   // Run all the update functions
-  for (typename list<edge_update_func_t>::iterator it_func =
+  for (typename std::list<edge_update_func_t>::iterator it_func =
            list_update_delete_edge_functions.begin();
        it_func != list_update_delete_edge_functions.end(); it_func++) {
     (*it_func)(edge_in);
@@ -212,7 +210,7 @@ int smp::planner<typeparams>::delete_edge(edge_t *edge_in) {
 template <class typeparams>
 int smp::planner<typeparams>::insert_trajectory(
     vertex_t *vertex_src_in, trajectory_t *trajectory_in,
-    list<state_t *> *intermediate_vertices_in, vertex_t *vertex_dst_in) {
+    std::list<state_t *> *intermediate_vertices_in, vertex_t *vertex_dst_in) {
 
   // TODO: take the intermediate vertices into account
 
@@ -244,7 +242,7 @@ int smp::planner<typeparams>::insert_trajectory(
 
 template <class typeparams>
 int smp::planner<typeparams>::insert_trajectories(
-    vertex_t *vertex_src_in, list<trajectory_t *> *list_trajectories_in,
+    vertex_t *vertex_src_in, std::list<trajectory_t *> *list_trajectories_in,
     vertex_t *vertex_dst_in) {
 
   // Exit if there no trajectories in the list
@@ -254,7 +252,7 @@ int smp::planner<typeparams>::insert_trajectories(
   // Initialize the previous vertex
   vertex_t *vertex_prev = vertex_src_in;
 
-  for (typename list<trajectory_t *>::iterator iter =
+  for (typename std::list<trajectory_t *>::iterator iter =
            list_trajectories_in->begin();
        iter != list_trajectories_in->end(); iter++) {
 

@@ -352,7 +352,7 @@ int smp::extender_dubins_double_integrator<typeparams>::
 template <class typeparams>
 int smp::extender_dubins_double_integrator<typeparams>::extend_dubins_di(
     state_t *state_ini, state_t *state_fin, int *fully_extends,
-    list<state_t *> *list_states_out, list<input_t *> *list_inputs_out) {
+    std::list<state_t *> *list_states_out, std::list<input_t *> *list_inputs_out) {
 
   *fully_extends = 0;
 
@@ -765,7 +765,7 @@ template <class typeparams>
 int smp::extender_dubins_double_integrator<typeparams>::extend(
     state_t *state_from_in, state_t *state_towards_in,
     int *exact_connection_out, trajectory_t *trajectory_out,
-    list<state_t *> *intermediate_vertices_out) {
+    std::list<state_t *> *intermediate_vertices_out) {
 
   intermediate_vertices_out->clear();
   trajectory_out->clear();

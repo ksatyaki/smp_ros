@@ -5,8 +5,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 template <int NUM_STATES>
 smp::state_array_double<NUM_STATES>::state_array_double() {
 

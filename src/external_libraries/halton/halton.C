@@ -1,12 +1,10 @@
 # include <cstdlib>
-# include <cmath>
+# include <math.h>
 # include <ctime>
 # include <iostream>
 # include <fstream>
 # include <iomanip>
 # include <cstring>
-
-using namespace std;
 
 # include "smp/external_libraries/halton/halton.h"
 
@@ -350,10 +348,10 @@ bool halham_dim_num_check ( int dim_num )
 
   if ( dim_num < 1 )
   {
-    cout << "\n";
-    cout << "HALHAM_DIM_NUM_CHECK - Fatal error!\n";
-    cout << "  DIM_NUM < 0.";
-    cout << "  DIM_NUM = " << dim_num << "\n";
+    std::cout << "\n";
+    std::cout << "HALHAM_DIM_NUM_CHECK - Fatal error!\n";
+    std::cout << "  DIM_NUM < 0.";
+    std::cout << "  DIM_NUM = " << dim_num << "\n";
     value = false;
   }
   else
@@ -404,10 +402,10 @@ bool halham_leap_check ( int dim_num, int leap[] )
   {
     if ( leap[i] < 1 )
     {
-      cout << "\n";
-      cout << "HALHAM_LEAP_CHECK - Fatal error!\n";
-      cout << "  Leap entries must be greater than 0.\n";
-      cout << "  leap[" << i << "] = " << leap[i] << "\n";
+      std::cout << "\n";
+      std::cout << "HALHAM_LEAP_CHECK - Fatal error!\n";
+      std::cout << "  Leap entries must be greater than 0.\n";
+      std::cout << "  leap[" << i << "] = " << leap[i] << "\n";
       value = false;
       break;
     }
@@ -449,10 +447,10 @@ bool halham_n_check ( int n )
 
   if ( n < 1 )
   {
-    cout << "\n";
-    cout << "HALHAM_N_CHECK - Fatal error!\n";
-    cout << "  N < 0.";
-    cout << "  N = " << n << "\n";
+    std::cout << "\n";
+    std::cout << "HALHAM_N_CHECK - Fatal error!\n";
+    std::cout << "  N < 0.";
+    std::cout << "  N = " << n << "\n";
     value = false;
   }
   else
@@ -503,10 +501,10 @@ bool halham_seed_check ( int dim_num, int seed[] )
   {
     if ( seed[i] < 0 )
     {
-      cout << "\n";
-      cout << "HALHAM_SEED_CHECK - Fatal error!\n";
-      cout << "  SEED entries must be nonnegative.\n";
-      cout << "  seed[" << i << "] = " << seed[i] << "\n";
+      std::cout << "\n";
+      std::cout << "HALHAM_SEED_CHECK - Fatal error!\n";
+      std::cout << "  SEED entries must be nonnegative.\n";
+      std::cout << "  seed[" << i << "] = " << seed[i] << "\n";
       value = false;
       break;
     }
@@ -549,10 +547,10 @@ bool halham_step_check ( int step )
 
   if ( step < 0 )
   {
-    cout << "\n";
-    cout << "HALHAM_STEP_CHECK - Fatal error!\n";
-    cout << "  STEP < 0.";
-    cout << "  STEP = " << step << "\n";
+    std::cout << "\n";
+    std::cout << "HALHAM_STEP_CHECK - Fatal error!\n";
+    std::cout << "  STEP < 0.";
+    std::cout << "  STEP = " << step << "\n";
     value = false;
   }
   else
@@ -613,7 +611,7 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
 //    Input, char *FILE_OUT_NAME, the name of the output file.
 //
 {
-  ofstream file_out;
+  std::ofstream file_out;
   int i;
   int j;
   int mhi;
@@ -624,9 +622,9 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
 
   if ( !file_out )
   {
-    cout << "\n";
-    cout << "HALHAM_WRITE - Fatal error!\n";
-    cout << "  Could not open the output file.\n";
+    std::cout << "\n";
+    std::cout << "HALHAM_WRITE - Fatal error!\n";
+    std::cout << "  Could not open the output file.\n";
     exit ( 1 );
   }
 
@@ -636,9 +634,9 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
   file_out << "#  created by routine HALHAM_WRITE.CC" << "\n";
   file_out << "#  at " << s << "\n";
   file_out << "#\n";
-  file_out << "#  DIM_NUM = " << setw(12) << dim_num << "\n";
-  file_out << "#  N =    " << setw(12) << n    << "\n";
-  file_out << "#  STEP = " << setw(12) << step << "\n";
+  file_out << "#  DIM_NUM = " << std::setw(12) << dim_num << "\n";
+  file_out << "#  N =    " << std::setw(12) << n    << "\n";
+  file_out << "#  STEP = " << std::setw(12) << step << "\n";
   for ( mlo = 1; mlo <= dim_num; mlo = mlo + 5 )
   {
     mhi = i4_min ( mlo + 5 - 1, dim_num );
@@ -652,7 +650,7 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
     }
     for ( i = mlo; i <= mhi; i++ )
     {
-      file_out << setw(12) << seed[i-1];
+      file_out << std::setw(12) << seed[i-1];
     }
     file_out << "\n";
   }
@@ -669,7 +667,7 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
     }
     for ( i = mlo; i <= mhi; i++ )
     {
-      file_out << setw(12) << leap[i-1];
+      file_out << std::setw(12) << leap[i-1];
     }
     file_out << "\n";
   }
@@ -686,7 +684,7 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
     }
     for ( i = mlo; i <= mhi; i++ )
     {
-      file_out << setw(12) << base[i-1];
+      file_out << std::setw(12) << base[i-1];
     }
     file_out << "\n";
   }
@@ -697,7 +695,7 @@ void halham_write ( int dim_num, int n, int step, int seed[], int leap[],
   {
     for ( i = 0; i < dim_num; i++ )
     {
-      file_out << setw(10) << r[i+j*dim_num] << "  ";
+      file_out << std::setw(10) << r[i+j*dim_num] << "  ";
     }
     file_out << "\n";
   }
@@ -894,10 +892,10 @@ bool halton_base_check ( int dim_num, int base[] )
   {
     if ( base[i] <= 1 )
     {
-      cout << "\n";
-      cout << "HALTON_BASE_CHECK - Fatal error!\n";
-      cout << "  Bases must be greater than 1.\n";
-      cout << "  base[" << i << "] = " << base[i] << "\n";
+      std::cout << "\n";
+      std::cout << "HALTON_BASE_CHECK - Fatal error!\n";
+      std::cout << "  Bases must be greater than 1.\n";
+      std::cout << "  base[" << i << "] = " << base[i] << "\n";
       value = false;
       break;
     }
@@ -1984,20 +1982,20 @@ void i4vec_transpose_print ( int n, int a[], char *title )
       ihi = i4_min ( ilo + 5 - 1, n );
       if ( ilo == 1 )
       {
-        cout << title;
+        std::cout << title;
       }
       else
       {
         for ( i = 1; i <= title_len; i++ )
         {
-          cout << " ";
+          std::cout << " ";
         }
       }
       for ( i = ilo; i <= ihi; i++ )
       {
-        cout << setw(12) << a[i-1];
+        std::cout << std::setw(12) << a[i-1];
       }
-      cout << "\n";
+      std::cout << "\n";
     }
   }
   else
@@ -2007,9 +2005,9 @@ void i4vec_transpose_print ( int n, int a[], char *title )
       ihi = i4_min ( ilo + 5 - 1, n );
       for ( i = ilo; i <= ihi; i++ )
       {
-        cout << setw(12) << a[i-1];
+        std::cout << std::setw(12) << a[i-1];
       }
-      cout << "\n";
+      std::cout << "\n";
     }
   }
 
@@ -2243,9 +2241,9 @@ int prime ( int n )
   }
   else
   {
-    cout << "\n";
-    cout << "PRIME - Fatal error!\n";
-    cout << "  Unexpected input value of n = " << n << "\n";
+    std::cout << "\n";
+    std::cout << "PRIME - Fatal error!\n";
+    std::cout << "  Unexpected input value of n = " << n << "\n";
     exit ( 1 );
   }
 

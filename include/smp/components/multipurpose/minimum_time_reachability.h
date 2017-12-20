@@ -78,12 +78,20 @@ class minimum_time_reachability : public model_checker_base<typeparams>,
   typedef region<NUM_DIMENSIONS> region_t;
 
   typedef int (*update_func_t)(trajectory_t *);
+
   typedef std::function<std::array<double, NUM_DIMENSIONS>(
       const std::array<double, NUM_DIMENSIONS> &,
       const std::array<double, NUM_DIMENSIONS> &)>
       distance_function_t;
 
+  typedef std::function<double(state_t *state_initial_in,
+                               trajectory_t *trajectory_in,
+                               state_t *state_final_in)>
+      cost_function_t;
+
   distance_function_t distance_function;
+
+  cost_function_t cost_function;
 
   std::list<update_func_t>
       list_update_functions; // A list of functions that will be called in the
@@ -135,6 +143,8 @@ public:
     distance_function = func;
   }
 
+  inline void set_cost_function(cost_function_t func) { cost_function = func; }
+
   int mc_update_insert_edge(edge_t *edge_in);
 
   int mc_update_delete_vertex(vertex_t *vertex_in);
@@ -146,6 +156,10 @@ public:
   double evaluate_cost_trajectory(state_t *state_initial_in,
                                   trajectory_t *trajectory_in,
                                   state_t *state_final_in = 0);
+
+  double default_cost_function(state_t *state_initial_in,
+                               trajectory_t *trajectory_in,
+                               state_t *state_final_in);
 
   /**
    * \brief Returns the cost of the best trajectory.

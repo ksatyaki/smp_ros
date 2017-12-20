@@ -5,8 +5,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 template <class typeparams, int NUM_DIMENSIONS>
 smp::distance_evaluator_kdtree<typeparams,
                                NUM_DIMENSIONS>::distance_evaluator_kdtree() {
@@ -88,7 +86,7 @@ int smp::distance_evaluator_kdtree<
   // Query the nearest state
   kdres_t *kdres = kd_nearest(kdtree, state_key);
   if (kd_res_end(kdres)) {
-    cout << "ERROR: No nearest vertex" << endl;
+    std::cout << "ERROR: No nearest vertex" << std::endl;
     kd_res_free(kdres);
     delete[] state_key;
     return -2;
@@ -107,7 +105,7 @@ int smp::distance_evaluator_kdtree<
 template <class typeparams, int NUM_DIMENSIONS>
 int smp::distance_evaluator_kdtree<typeparams, NUM_DIMENSIONS>::
     find_near_vertices_r(state_t *state_in, double radius_in,
-                         list<void *> *list_data_out) {
+                         std::list<void *> *list_data_out) {
 
   if (vertex_deleted) {
     if (list_vertices) {
@@ -142,14 +140,14 @@ int smp::distance_evaluator_kdtree<typeparams, NUM_DIMENSIONS>::
 template <class typeparams, int NUM_DIMENSIONS>
 int smp::distance_evaluator_kdtree<typeparams, NUM_DIMENSIONS>::
     find_near_vertices_k(state_t *state_in, int k_in,
-                         list<void *> *list_data_out) {
+                         std::list<void *> *list_data_out) {
 
   return 0;
 }
 
 template <class typeparams, int NUM_DIMENSIONS>
 int smp::distance_evaluator_kdtree<typeparams, NUM_DIMENSIONS>::
-    set_list_vertices(list<vertex_t *> *list_vertices_in) {
+    set_list_vertices(std::list<vertex_t *> *list_vertices_in) {
 
   list_vertices = list_vertices_in;
 
@@ -160,30 +158,30 @@ template <class typeparams, int NUM_DIMENSIONS>
 int smp::distance_evaluator_kdtree<
     typeparams, NUM_DIMENSIONS>::reconstruct_kdtree_from_vertex_list() {
 
-  // cout << "Reconstructing the kdtree" << endl;
+  // std::cout << "Reconstructing the kdtree" << std::endl;
 
   kd_free(kdtree);
   kdtree = kd_create(NUM_DIMENSIONS);
 
   if (list_vertices) {
-    for (typename list<vertex_t *>::iterator it_vertex = list_vertices->begin();
+    for (typename std::list<vertex_t *>::iterator it_vertex = list_vertices->begin();
          it_vertex != list_vertices->end(); it_vertex++) {
 
       vertex_t *vertex_curr = *it_vertex;
 
-      // cout << "Vertex : " << vertex_curr->state->state_vars[0] << ", " <<
-      // vertex_curr->state->state_vars[1] << endl;
+      // std::cout << "Vertex : " << vertex_curr->state->state_vars[0] << ", " <<
+      // vertex_curr->state->state_vars[1] << std::endl;
 
       this->de_update_insert_vertex(vertex_curr);
     }
   } else {
-    cout << "ERROR:distance_evaluators:kdtree: No list of vertices to "
+    std::cout << "ERROR:distance_evaluators:kdtree: No list of vertices to "
             "reconstruct the tree"
-         << endl;
+         << std::endl;
     return 0;
   }
 
-  // cout << "Reconstruction of the kdtree is complete" << endl;
+  // std::cout << "Reconstruction of the kdtree is complete" << std::endl;
 
   return 1;
 }

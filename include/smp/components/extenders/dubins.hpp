@@ -47,8 +47,8 @@ int smp::extender_dubins<typeparams>::ex_update_delete_edge(edge_t *edge_in) {
 template <class typeparams>
 int smp::extender_dubins<typeparams>::extend_dubins_spheres(
     double x_s1, double y_s1, double t_s1, double x_s2, double y_s2,
-    double t_s2, int comb_no, int *fully_extends, list<state_t *> *list_states,
-    list<input_t *> *list_inputs) {
+    double t_s2, int comb_no, int *fully_extends, std::list<state_t *> *list_states,
+    std::list<input_t *> *list_inputs) {
 
   double x_tr = x_s2 - x_s1;
   double y_tr = y_s2 - y_s1;
@@ -289,7 +289,7 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
 template <class typeparams>
 double smp::extender_dubins<typeparams>::extend_dubins_all(
     state_t *state_ini, state_t *state_fin, int *fully_extends,
-    list<state_t *> *list_states_out, list<input_t *> *list_inputs_out) {
+    std::list<state_t *> *list_states_out, std::list<input_t *> *list_inputs_out) {
 
   // 1. Compute the centers of all four spheres
   double ti = (*state_ini)[2];
@@ -390,7 +390,7 @@ template <class typeparams>
 int smp::extender_dubins<typeparams>::extend(
     state_t *state_from_in, state_t *state_towards_in,
     int *exact_connection_out, trajectory_t *trajectory_out,
-    list<state_t *> *intermediate_vertices_out) {
+    std::list<state_t *> *intermediate_vertices_out) {
 
   if (extend_dubins_all(state_from_in, state_towards_in, exact_connection_out,
                         &(trajectory_out->list_states),

@@ -52,7 +52,7 @@ class collision_checker_standard : public collision_checker_base<typeparams> {
   // 2: use length discretization
   int discretization_method;
 
-  list<region_t *> list_obstacles;
+  std::list<region_t *> list_obstacles;
 
 public:
   collision_checker_standard();

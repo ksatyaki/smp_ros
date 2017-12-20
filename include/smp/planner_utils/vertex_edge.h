@@ -15,7 +15,6 @@
 #include <smp/planner_utils/trajectory.h>
 
 #include <list>
-using namespace std;
 
 //! This parameter can be set to one for fast vertex deletion.
 /*!
@@ -77,13 +76,13 @@ public:
   /*!
     The list of all edges that point to this vertex.
   */
-  list<edge_t *> incoming_edges;
+  std::list<edge_t *> incoming_edges;
 
   //! A list of outgoing edges
   /*!
     This list of all edges that point out from this vertex.
   */
-  list<edge_t *> outgoing_edges;
+  std::list<edge_t *> outgoing_edges;
 
 #if _SMP_FAST_VERTEX_DELETE
 
@@ -95,7 +94,7 @@ public:
     used to quickly remove the vertex from list, without having to traverse the
     whole list.
    */
-  typename list<vertex_t *>::iterator it_vertex_list;
+  typename std::list<vertex_t *>::iterator it_vertex_list;
 #endif
 
   vertex();

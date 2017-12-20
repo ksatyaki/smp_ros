@@ -6,7 +6,6 @@ set(CMAKE_BUILD_TYPE Debug)
 set(MRPT_DONT_USE_DBG_LIBS 1)
 
 find_package(catkin REQUIRED COMPONENTS
-  cliffmap_ros
   geometry_msgs
   nav_msgs
   roscpp
@@ -20,8 +19,8 @@ find_package(Boost REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES smp_ros_external
-  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core cliffmap_ros
+  LIBRARIES smp_ros_external kdtree
+  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core
   DEPENDS Boost
 )
 

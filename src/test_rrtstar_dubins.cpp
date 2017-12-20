@@ -66,6 +66,9 @@ typedef smp::rrtstar<typeparams> RRTStar;
 
 int main() {
 
+  using std::cout;
+  using std::endl;
+
   // 1. CREATE PLANNING OBJECTS
 
   // 1.a Create the components

@@ -4,8 +4,8 @@
 // SMP HEADER FILES ------
 #include <smp/components/collision_checkers/standard.hpp>
 #include <smp/components/distance_evaluators/kdtree.hpp>
-#include <smp/components/extenders/single_integrator.hpp>
 #include <smp/components/extenders/dubins.h>
+#include <smp/components/extenders/single_integrator.hpp>
 #include <smp/components/multipurpose/minimum_time_reachability.hpp>
 #include <smp/components/samplers/uniform.hpp>
 
@@ -56,7 +56,8 @@ typedef smp::trajectory<typeparams> trajectory_t;
 typedef smp::sampler_uniform<typeparams, NUM_DIMENSIONS> UniformSampler;
 typedef smp::distance_evaluator_kdtree<typeparams, NUM_DIMENSIONS>
     KDTreeDistanceEvaluator;
-typedef smp::extender_single_integrator<typeparams, NUM_DIMENSIONS> ExtenderSingleIntegrator;
+typedef smp::extender_single_integrator<typeparams, NUM_DIMENSIONS>
+    ExtenderSingleIntegrator;
 typedef smp::collision_checker_standard<typeparams, NUM_DIMENSIONS>
     CollisionCheckerStandard;
 typedef smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>
@@ -66,6 +67,9 @@ typedef smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>
 typedef smp::rrtstar<typeparams> RRTStar;
 
 int main() {
+
+  using std::cout;
+  using std::endl;
 
   // 1. CREATE PLANNING OBJECTS
 
@@ -81,7 +85,7 @@ int main() {
   //                                       as a model checker and a cost
   //                                       evaluator.
   RRTStar planner(sampler, distance_evaluator, extender, collision_checker,
-                    min_time_reachability, min_time_reachability);
+                  min_time_reachability, min_time_reachability);
 
   planner.parameters.set_phase(
       2); // The phase parameter can be used to run the algorithm as an RRT,

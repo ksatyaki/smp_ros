@@ -28,8 +28,6 @@
 #include <iostream>
 #include <list>
 
-using namespace std;
-
 //! Sampling-based Motion Planning (SMP) Library
 namespace smp {
 
@@ -66,10 +64,10 @@ template <class typeparams> class planner {
   typedef int (*vertex_update_func_t)(vertex_t *);
   typedef int (*edge_update_func_t)(edge_t *);
 
-  list<vertex_update_func_t> list_update_insert_vertex_functions;
-  list<vertex_update_func_t> list_update_delete_vertex_functions;
-  list<edge_update_func_t> list_update_insert_edge_functions;
-  list<edge_update_func_t> list_update_delete_edge_functions;
+  std::list<vertex_update_func_t> list_update_insert_vertex_functions;
+  std::list<vertex_update_func_t> list_update_delete_vertex_functions;
+  std::list<edge_update_func_t> list_update_insert_edge_functions;
+  std::list<edge_update_func_t> list_update_delete_edge_functions;
 
   //! Number of vertices stored in the list of vertices
   /*!
@@ -150,7 +148,7 @@ public:
     function and an existing
     vertex is removed using the delete_vertex function.
   */
-  list<vertex_t *> list_vertices;
+  std::list<vertex_t *> list_vertices;
 
   planner();
   ~planner();
@@ -265,7 +263,7 @@ public:
    * @returns Returns 1 for success, a non-positive number for failure.
    */
   int insert_trajectory(vertex_t *vertex_src_in, trajectory_t *trajectory_in,
-                        list<state_t *> *intermediate_vertices_in,
+                        std::list<state_t *> *intermediate_vertices_in,
                         vertex_t *vertex_dst_in = 0);
 
   /**
@@ -295,7 +293,7 @@ public:
    * @returns Returns 1 for success, a non-positive number for failure.
    */
   int insert_trajectories(vertex_t *vertex_src_in,
-                          list<trajectory_t *> *list_trajectories_in,
+                          std::list<trajectory_t *> *list_trajectories_in,
                           vertex_t *vertex_dst_in = 0);
 
   //@}

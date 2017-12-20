@@ -42,7 +42,7 @@ class distance_evaluator_kdtree : public distance_evaluator_base<typeparams> {
 
   kdtree_t *kdtree;
 
-  list<vertex_t *> *list_vertices;
+  std::list<vertex_t *> *list_vertices;
   bool vertex_deleted;
 
   double weights[NUM_DIMENSIONS];
@@ -62,10 +62,10 @@ public:
   int find_nearest_vertex(state_t *state_in, void **data_out);
 
   int find_near_vertices_r(state_t *state_in, double radius_in,
-                           list<void *> *list_data_out);
+                           std::list<void *> *list_data_out);
 
   int find_near_vertices_k(state_t *state_in, int k_in,
-                           list<void *> *list_data_out);
+                           std::list<void *> *list_data_out);
 
   /**
    * \brief Sets the list of vertices used to rebuild the kdtree
@@ -81,7 +81,7 @@ public:
    *
    * @returns Returns 1 for success, and a non-positive value to indicate error.
    */
-  int set_list_vertices(list<vertex_t *> *list_vertices_in);
+  int set_list_vertices(std::list<vertex_t *> *list_vertices_in);
 
   /**
    * \brief Reconstructs the tree from its vertex list.

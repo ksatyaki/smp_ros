@@ -19,7 +19,7 @@ template <class typeparams, int NUM_DIMENSIONS>
 smp::collision_checker_standard<typeparams,
                                 NUM_DIMENSIONS>::~collision_checker_standard() {
 
-  for (typename list<region_t *>::iterator iter = list_obstacles.begin();
+  for (typename std::list<region_t *>::iterator iter = list_obstacles.begin();
        iter != list_obstacles.end(); iter++) {
 
     region_t *region_curr = *iter;
@@ -66,7 +66,7 @@ int smp::collision_checker_standard<
   if (list_obstacles.size() == 0)
     return 1;
 
-  for (typename list<region_t *>::iterator iter = list_obstacles.begin();
+  for (typename std::list<region_t *>::iterator iter = list_obstacles.begin();
        iter != list_obstacles.end(); iter++) {
     region_t *region_curr = *iter;
 
@@ -100,7 +100,7 @@ int smp::collision_checker_standard<typeparams, NUM_DIMENSIONS>::
   if (trajectory_in->list_states.size() == 0)
     return 1;
 
-  typename list<state_t *>::iterator iter = trajectory_in->list_states.begin();
+  typename std::list<state_t *>::iterator iter = trajectory_in->list_states.begin();
 
   state_t *state_prev = *iter;
 
@@ -138,7 +138,7 @@ int smp::collision_checker_standard<typeparams, NUM_DIMENSIONS>::
         for (int i = 0; i < NUM_DIMENSIONS; i++) // Normalize the increments.
           increments[i] = increments[i] / ((double)(num_increments + 1));
 
-        for (typename list<region_t *>::iterator iter = list_obstacles.begin();
+        for (typename std::list<region_t *>::iterator iter = list_obstacles.begin();
              iter != list_obstacles.end(); iter++) {
 
           region_t *region_curr = *iter;

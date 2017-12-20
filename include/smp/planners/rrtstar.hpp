@@ -56,7 +56,7 @@ int smp::rrtstar<typeparams>::propagate_cost(vertex_t *vertex_in,
   cost_evaluator.ce_update_vertex_cost(vertex_in);
 
   // Recursively propagate the cost along the edges
-  for (typename list<edge_t *>::iterator iter_edge =
+  for (typename std::list<edge_t *>::iterator iter_edge =
            vertex_in->outgoing_edges.begin();
        iter_edge != vertex_in->outgoing_edges.end(); iter_edge++) {
 
@@ -100,7 +100,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
                  1.0 / ((double)(parameters.get_dimension())));
 
     // if (this->get_num_vertices()%1000 == 0)
-    //   cout << "radius " << radius << endl;
+    //   std::cout << "radius " << radius << std::endl;
 
     if (radius > parameters.get_max_radius())
       radius = parameters.get_max_radius();
@@ -111,7 +111,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
   int exact_connection = -1;
   trajectory_t *trajectory = new trajectory_t;
-  list<state_t *> *intermediate_vertices = new list<state_t *>;
+  std::list<state_t *> *intermediate_vertices = new std::list<state_t *>;
   if (this->extender.extend(vertex_nearest->state, state_sample,
                             &exact_connection, trajectory,
                             intermediate_vertices) == 1) {
@@ -125,7 +125,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
       // 5. Find the parent state
       vertex_t *vertex_parent = vertex_nearest;
       trajectory_t *trajectory_parent = trajectory;
-      list<state_t *> *intermediate_vertices_parent = intermediate_vertices;
+      std::list<state_t *> *intermediate_vertices_parent = intermediate_vertices;
 
       double cost_trajectory_from_parent =
           this->cost_evaluator.evaluate_cost_trajectory(vertex_parent->state,
@@ -134,7 +134,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
           vertex_parent->data.total_cost + cost_trajectory_from_parent;
 
       // Define the new variables that are used in both phase 1 and 2.
-      list<void *> list_vertices_in_ball;
+      std::list<void *> list_vertices_in_ball;
       state_t *state_extended = NULL;
 
       if (parameters.get_phase() >= 1) { // Check whether phase 1 should occur.
@@ -148,7 +148,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
         this->distance_evaluator.find_near_vertices_r(state_extended, radius,
                                                       &list_vertices_in_ball);
 
-        for (typename list<void *>::iterator iter =
+        for (typename std::list<void *>::iterator iter =
                  list_vertices_in_ball.begin();
              iter != list_vertices_in_ball.end(); iter++) {
           vertex_t *vertex_curr = (vertex_t *)(*iter);
@@ -159,7 +159,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
           // Attempt an extension from vertex_curr to the extended state
           trajectory_t *trajectory_curr = new trajectory_t;
-          list<state_t *> *intermediate_vertices_curr = new list<state_t *>;
+          std::list<state_t *> *intermediate_vertices_curr = new std::list<state_t *>;
           exact_connection = -1;
           if (this->extender.extend(vertex_curr->state, state_extended,
                                     &exact_connection, trajectory_curr,
@@ -190,7 +190,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
                     trajectory_curr; //   to properly free the memory later
                 trajectory_curr = trajectory_tmp;
 
-                list<state_t *> *intermediate_vertices_tmp =
+                std::list<state_t *> *intermediate_vertices_tmp =
                     intermediate_vertices_parent; // Swap the intermediate
                                                   // vertices
                 intermediate_vertices_parent =
@@ -225,7 +225,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
         // 6. Extend from the new vertex to the existing vertices in the ball to
         // rewire the tree
-        for (list<void *>::iterator iter = list_vertices_in_ball.begin();
+        for (std::list<void *>::iterator iter = list_vertices_in_ball.begin();
              iter != list_vertices_in_ball.end(); iter++) {
 
           vertex_t *vertex_curr = (vertex_t *)(*iter);
@@ -235,7 +235,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
           // Attempt an extension from the extended vertex to the current vertex
           trajectory_t *trajectory_curr = new trajectory_t;
-          list<state_t *> *intermediate_vertices_curr = new list<state_t *>;
+          std::list<state_t *> *intermediate_vertices_curr = new std::list<state_t *>;
           bool free_tmp_memory = true;
           exact_connection = -1;
           if (this->extender.extend(vertex_last->state, vertex_curr->state,

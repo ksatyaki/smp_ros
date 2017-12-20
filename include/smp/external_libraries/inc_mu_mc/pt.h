@@ -11,7 +11,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-using namespace std;
 
 enum PT_type {
 	PT_PRP = 1,
@@ -28,11 +27,11 @@ class PT_prp;
 class PT_var;
 class PT_operator;
 
-typedef set<PT_node*> subformulaeSet;
-typedef set<PT_node*>::iterator subformulaeSet_it;
+typedef std::set<PT_node*> subformulaeSet;
+typedef std::set<PT_node*>::iterator subformulaeSet_it;
 
-typedef set<int> propositionSet;
-typedef set<int>::iterator propositionSet_it;
+typedef std::set<int> propositionSet;
+typedef std::set<int>::iterator propositionSet_it;
 
 class PT_node {
 public: 
@@ -65,7 +64,7 @@ class ParseTree {
 public: 
 	ParseTree ();
 	~ParseTree ();
-	int parseFormula (string s);
+	int parseFormula (std::string s);
 	bool isEmpty ();
 // 	subformulaeSet& getSubformulaeSuc ();
 // 	subformulaeSet& getSubformulaeMu ();

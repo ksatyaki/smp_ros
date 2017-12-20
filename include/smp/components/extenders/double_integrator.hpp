@@ -25,8 +25,6 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace std;
-
 double extend_with_time_optimal_control_one_axis(
     double s_ini[2], double s_fin[2], double u_max, int *direction,
     int *traj_saturated, double *x_intersect_beg, double *x_intersect_end,
@@ -62,7 +60,7 @@ double extend_with_time_optimal_control_one_axis(
     if ((s_ini[1] < v_intersect_pos_1) && (s_fin[1] < v_intersect_pos_1)) {
 
       traj_1_feasible = true;
-      // cout << "traj 1 feasible" << endl;
+      // std::cout << "traj 1 feasible" << std::endl;
 
       if ((s_ini[1] < v_intersect_neg_1) && (s_fin[1] < v_intersect_neg_1)) {
         v_intersect_1 = v_intersect_neg_1;
@@ -72,8 +70,8 @@ double extend_with_time_optimal_control_one_axis(
 
       /* ===== Consistency check === TODO: Remove this later ====
       if ((v_intersect_1 < VELOCITY_CONSTRAINT_MIN - 0.1)) {
-        cout << "ERR: Velocity constraint is not met :" << v_intersect_1
-             << endl;
+        std::cout << "ERR: Velocity constraint is not met :" << v_intersect_1
+             << std::endl;
         exit(1);
       }
       // ===== */
@@ -97,8 +95,8 @@ double extend_with_time_optimal_control_one_axis(
       }
       t_tot_1 = t0_1 + t1_1 + ti_1;
 
-      // cout << "Times control 1 : " << t0_1 << " : " << t0_1 + ti_1 << " : "
-      // << t0_1 + ti_1 + t1_1 << endl << endl;
+      // std::cout << "Times control 1 : " << t0_1 << " : " << t0_1 + ti_1 << " : "
+      // << t0_1 + ti_1 + t1_1 << std::endl << std::endl;
     }
   }
 
@@ -113,7 +111,7 @@ double extend_with_time_optimal_control_one_axis(
     if ((s_ini[1] > v_intersect_neg_2) && (s_fin[1] > v_intersect_neg_2)) {
 
       traj_2_feasible = true;
-      // cout << "traj 2 feasible" << endl;
+      // std::cout << "traj 2 feasible" << std::endl;
 
       if ((s_ini[1] > v_intersect_pos_2) && (s_fin[1] > v_intersect_pos_2)) {
         v_intersect_2 = v_intersect_pos_2;
@@ -123,8 +121,8 @@ double extend_with_time_optimal_control_one_axis(
 
       /* ===== Consistency check === TODO: Remove this later ====
       if ((v_intersect_2 > VELOCITY_CONSTRAINT_MAX + 0.1)) {
-        cout << "ERR: Velocity constraint is not met :n" << v_intersect_2
-             << endl;
+        std::cout << "ERR: Velocity constraint is not met :n" << v_intersect_2
+             << std::endl;
         exit(1);
       }
       // ===== */
@@ -148,15 +146,15 @@ double extend_with_time_optimal_control_one_axis(
       }
       t_tot_2 = t0_2 + t1_2 + ti_2;
 
-      // cout << endl;
-      // cout << "Times control 2 : " << t0_2 << " : " << t0_2 + ti_2 << " : "
-      // << t0_2 + ti_2 + t1_2 << endl;
+      // std::cout << std::endl;
+      // std::cout << "Times control 2 : " << t0_2 << " : " << t0_2 + ti_2 << " : "
+      // << t0_2 + ti_2 + t1_2 << std::endl;
     }
   }
 
   // 3. Return the results
   if ((!traj_1_feasible) && (!traj_2_feasible)) { // This should never kick in.
-    cout << "ERR: no traj feasible" << endl;
+    std::cout << "ERR: no traj feasible" << std::endl;
     // return -1.0;
     exit(1);
   }
@@ -169,7 +167,7 @@ double extend_with_time_optimal_control_one_axis(
       *x_intersect_end = x_intersect_end_1;
       *v_intersect = v_intersect_1;
     } else {
-      cout << "ERR: no direction controls 1" << endl;
+      std::cout << "ERR: no direction controls 1" << std::endl;
       exit(1);
     }
     return t_tot_1;
@@ -181,7 +179,7 @@ double extend_with_time_optimal_control_one_axis(
       *x_intersect_end = x_intersect_end_2;
       *v_intersect = v_intersect_2;
     } else {
-      cout << "ERR: no direction controls 2" << endl;
+      std::cout << "ERR: no direction controls 2" << std::endl;
       exit(1);
     }
     return t_tot_2;
@@ -197,7 +195,7 @@ int extend_with_effort_optimal_control_one_axis(
   // effort that achieves time t_goal -+ t_eps
 
   if (t_goal < t_min) {
-    cout << "ERR: t_goal < t_min \n" << endl;
+    std::cout << "ERR: t_goal < t_min \n" << std::endl;
     exit(1);
   }
 
@@ -251,8 +249,8 @@ int extend_with_effort_optimal_control_one_axis(
 template <class typeparams, int NUM_DIMENSIONS>
 int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::
     extend_with_optimal_control(state_t *state_ini, state_t *state_fin,
-                                list<state_t *> *list_states_out,
-                                list<input_t *> *list_inputs_out) {
+                                std::list<state_t *> *list_states_out,
+                                std::list<input_t *> *list_inputs_out) {
 
   // *states_all_out = NULL;
   // *inputs_all_out = NULL;
@@ -288,10 +286,10 @@ int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::
   double max_control_a1 = INPUT_CONSTRAINT_MAX;
   double max_control_a2 = INPUT_CONSTRAINT_MAX;
 
-  // cout << "time_a1 : " << time_a1 << " :::: time_a2 : "  << time_a2 << endl;
+  // std::cout << "time_a1 : " << time_a1 << " :::: time_a2 : "  << time_a2 << std::endl;
 
   if ((time_a1 < 0.0) || (time_a2 < 0.0)) {
-    cout << "No traj feasible" << endl;
+    std::cout << "No traj feasible" << std::endl;
     return 0;
   }
 
@@ -543,17 +541,17 @@ template <class typeparams, int NUM_DIMENSIONS>
 int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::extend(
     state_t *state_from_in, state_t *state_towards_in,
     int *exact_connection_out, trajectory_t *trajectory_out,
-    list<state_t *> *intermediate_vertices_out) {
+    std::list<state_t *> *intermediate_vertices_out) {
 
-  // cout << "state_from";
+  // std::cout << "state_from";
   // for (int i = 0; i < 4; i++)
-  //   cout << " : " << state_from_in->state_vars[i];
-  // cout << endl;
+  //   std::cout << " : " << state_from_in->state_vars[i];
+  // std::cout << std::endl;
 
-  // cout << "state_towa";
+  // std::cout << "state_towa";
   // for (int i = 0; i < 4; i++)
-  //   cout << " : " << state_towards_in->state_vars[i];
-  // cout << endl;
+  //   std::cout << " : " << state_towards_in->state_vars[i];
+  // std::cout << std::endl;
 
   intermediate_vertices_out->clear();
 

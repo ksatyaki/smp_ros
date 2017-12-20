@@ -17,8 +17,6 @@
 
 #include <list>
 
-using namespace std;
-
 namespace smp {
 
 //! Implementation of the state data structure for the double integrator
@@ -83,8 +81,8 @@ class extender_double_integrator : public extender_base<typeparams> {
   // double velocity_constraint_max[NUM_DIMENSIONS];
 
   int extend_with_optimal_control(state_t *state_ini, state_t *state_fin,
-                                  list<state_t *> *list_states_out,
-                                  list<input_t *> *list_inputs_out);
+                                  std::list<state_t *> *list_states_out,
+                                  std::list<input_t *> *list_inputs_out);
 
 public:
   extender_double_integrator();
@@ -100,7 +98,7 @@ public:
 
   int extend(state_t *state_from_in, state_t *state_towards_in,
              int *exact_connection_out, trajectory_t *trajectory_out,
-             list<state_t *> *intermediate_vertices_out);
+             std::list<state_t *> *intermediate_vertices_out);
 };
 }
 

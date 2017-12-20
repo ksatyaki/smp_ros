@@ -11,7 +11,7 @@
 template <int NUM_DIMENSIONS>
 std::array<double, NUM_DIMENSIONS>
 smp::default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
-                          const std::array<double, NUM_DIMENSIONS> &goal) {
+                               const std::array<double, NUM_DIMENSIONS> &goal) {
   std::array<double, NUM_DIMENSIONS> result;
   for (int i = 0; i < state.size(); i++) {
     result[i] = state[i] - goal[i];
@@ -61,12 +61,12 @@ int smp::minimum_time_reachability<
 
     if (min_cost_vertex == NULL) {
       min_cost_vertex = vertex_in;
-      cout << "COST -- : " << vertex_in->data.total_cost << endl;
+      std::cout << "COST -- : " << vertex_in->data.total_cost << std::endl;
       update_trajectory = true;
     }
 
     if ((vertex_in->data.total_cost < min_cost_vertex->data.total_cost)) {
-      cout << "COST -- : " << vertex_in->data.total_cost << endl;
+      std::cout << "COST -- : " << vertex_in->data.total_cost << std::endl;
       min_cost_vertex = vertex_in;
       update_trajectory = true;
     }
@@ -87,13 +87,13 @@ int smp::minimum_time_reachability<
         min_cost_trajectory.list_states.push_front(
             new state_t(*(vertex_ptr->state)));
 
-        for (typename list<state_t *>::iterator it_state =
+        for (typename std::list<state_t *>::iterator it_state =
                  trajectory_curr->list_states.begin();
              it_state != trajectory_curr->list_states.end(); it_state++) {
           min_cost_trajectory.list_states.push_front(new state_t(**it_state));
         }
 
-        for (typename list<input_t *>::iterator it_input =
+        for (typename std::list<input_t *>::iterator it_input =
                  trajectory_curr->list_inputs.begin();
              it_input != trajectory_curr->list_inputs.end(); it_input++) {
           min_cost_trajectory.list_inputs.push_front(new input_t(**it_input));
@@ -103,7 +103,7 @@ int smp::minimum_time_reachability<
       }
 
       // Call all the update functions
-      for (typename list<update_func_t>::iterator it_func =
+      for (typename std::list<update_func_t>::iterator it_func =
                list_update_functions.begin();
            it_func != list_update_functions.end(); it_func++) {
 
@@ -197,14 +197,14 @@ int smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::get_solution(
 
   trajectory_out.clear();
 
-  for (typename list<state_t *>::iterator it_state =
+  for (typename std::list<state_t *>::iterator it_state =
            min_cost_trajectory.list_states.begin();
        it_state != min_cost_trajectory.list_states.end(); it_state++) {
 
     trajectory_out.list_states.push_front(new state_t(**it_state));
   }
 
-  for (typename list<input_t *>::iterator it_input =
+  for (typename std::list<input_t *>::iterator it_input =
            min_cost_trajectory.list_inputs.begin();
        it_input != min_cost_trajectory.list_inputs.end(); it_input++) {
     trajectory_out.list_inputs.push_front(new input_t(**it_input));
@@ -218,16 +218,32 @@ double smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::
     evaluate_cost_trajectory(state_t *state_initial_in,
                              trajectory_t *trajectory_in,
                              state_t *state_final_in) {
+
+  if (cost_function) {
+    return cost_function(state_initial_in, trajectory_in, state_final_in);
+  } else {
+    return default_cost_function(state_initial_in, trajectory_in,
+                                 state_final_in);
+  }
+}
+
+template <class typeparams, int NUM_DIMENSIONS>
+double smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::
+    default_cost_function(state_t *state_initial_in,
+                          trajectory_t *trajectory_in,
+                          state_t *state_final_in) {
+
   double total_time = 0.0;
   double total_distance = 0.0;
-  //state_t* state_prev = state_initial_in;
+  // state_t* state_prev = state_initial_in;
 
-  //typename list<state_t *>::iterator iter_state = trajectory_in->list_states.begin();
-  for (typename list<input_t *>::iterator iter =
+  // typename std::list<state_t *>::iterator iter_state =
+  // trajectory_in->list_states.begin();
+  for (typename std::list<input_t *>::iterator iter =
            trajectory_in->list_inputs.begin();
        iter != trajectory_in->list_inputs.end(); iter++) {
     input_t *input_curr = *iter;
-    //state_t* state_curr = *iter_state;
+    // state_t* state_curr = *iter_state;
 
     // std::array<double, NUM_DIMENSIONS> s_curr, s_prev;
     // for( int i =0 ; i < NUM_DIMENSIONS; i++) {
@@ -250,7 +266,7 @@ double smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::
   }
 
   return total_time;
-  //return total_distance;
+  // return total_distance;
 }
 
 template <class typeparams, int NUM_DIMENSIONS>
