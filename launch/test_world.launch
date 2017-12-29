@@ -12,6 +12,9 @@
   <node name="mcl" type="amcl" pkg="amcl">
     <remap from="scan" to="base_scan" />
     <param name="odom_model_type" value="car" />
+    <param name="initial_pose_x" value="0.0" />
+    <param name="initial_pose_y" value="-4.0" />
+    <param name="initial_pose_a" value="1.57079" />
   </node>
 
 

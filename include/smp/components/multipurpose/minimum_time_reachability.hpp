@@ -87,15 +87,15 @@ int smp::minimum_time_reachability<
         min_cost_trajectory.list_states.push_front(
             new state_t(*(vertex_ptr->state)));
 
-        for (typename std::list<state_t *>::iterator it_state =
-                 trajectory_curr->list_states.begin();
-             it_state != trajectory_curr->list_states.end(); it_state++) {
+        for (typename std::list<state_t *>::reverse_iterator it_state =
+                 trajectory_curr->list_states.rbegin();
+             it_state != trajectory_curr->list_states.rend(); it_state++) {
           min_cost_trajectory.list_states.push_front(new state_t(**it_state));
         }
 
-        for (typename std::list<input_t *>::iterator it_input =
-                 trajectory_curr->list_inputs.begin();
-             it_input != trajectory_curr->list_inputs.end(); it_input++) {
+        for (typename std::list<input_t *>::reverse_iterator it_input =
+                 trajectory_curr->list_inputs.rbegin();
+             it_input != trajectory_curr->list_inputs.rend(); it_input++) {
           min_cost_trajectory.list_inputs.push_front(new input_t(**it_input));
         }
 

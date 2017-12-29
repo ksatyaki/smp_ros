@@ -3,7 +3,6 @@
 
 #define DISTANCE_LIMIT 100.0
 #define DELTA_DISTANCE 0.25
-#define TURNING_RADIUS 1.00
 
 #ifndef DBL_MAX
 #define DBL_MAX 10000000000000000.0
@@ -63,9 +62,9 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
   double y_end;
   double t_end;
 
-  if (distance > 2 * TURNING_RADIUS) { // disks do not intersect
+  if (distance > 2 * turning_radius) { // disks do not intersect
 
-    double t_balls = acos(2 * TURNING_RADIUS / distance);
+    double t_balls = acos(2 * turning_radius / distance);
 
     switch (comb_no) {
     case 1:
@@ -113,10 +112,10 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
     }
   }
 
-  x_start = x_s1 + TURNING_RADIUS * cos(t_start);
-  y_start = y_s1 + TURNING_RADIUS * sin(t_start);
-  x_end = x_s2 + TURNING_RADIUS * cos(t_end);
-  y_end = y_s2 + TURNING_RADIUS * sin(t_end);
+  x_start = x_s1 + turning_radius * cos(t_start);
+  y_start = y_s1 + turning_radius * sin(t_start);
+  x_end = x_s2 + turning_radius * cos(t_end);
+  y_end = y_s2 + turning_radius * sin(t_end);
 
   int direction_s1 = 1;
   if ((comb_no == 2) || (comb_no == 4)) {
@@ -146,7 +145,7 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
   }
 
   double total_distance_travel =
-      (t_increment_s1 + t_increment_s2) * TURNING_RADIUS + distance;
+      (t_increment_s1 + t_increment_s2) * turning_radius + distance;
 
   double distance_limit = DISTANCE_LIMIT;
 
@@ -157,7 +156,7 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
     // Generate states/inputs
 
     double del_d = DELTA_DISTANCE;
-    double del_t = del_d * TURNING_RADIUS;
+    double del_t = del_d * turning_radius;
 
     double t_inc_curr = 0.0;
 
@@ -173,9 +172,9 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
       input_t *input_curr = new input_t;
 
       (*state_curr)[0] =
-          x_s1 + TURNING_RADIUS * cos(direction_s1 * t_inc_curr + t_s1);
+          x_s1 + turning_radius * cos(direction_s1 * t_inc_curr + t_s1);
       (*state_curr)[1] =
-          y_s1 + TURNING_RADIUS * sin(direction_s1 * t_inc_curr + t_s1);
+          y_s1 + turning_radius * sin(direction_s1 * t_inc_curr + t_s1);
       (*state_curr)[2] = direction_s1 * t_inc_curr + t_s1 +
                          ((direction_s1 == 1) ? M_PI_2 : 3.0 * M_PI_2);
       while ((*state_curr)[2] < 0)
@@ -183,13 +182,13 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
       while ((*state_curr)[2] > 2 * M_PI)
         (*state_curr)[2] -= 2 * M_PI;
 
-      (*input_curr)[0] = t_inc_rel * TURNING_RADIUS;
+      (*input_curr)[0] = t_inc_rel * turning_radius;
       (*input_curr)[1] = ((comb_no == 1) || (comb_no == 3)) ? -1 : 1;
 
       list_states->push_back(state_curr);
       list_inputs->push_back(input_curr);
 
-      if (t_inc_curr * TURNING_RADIUS > distance_limit) {
+      if (t_inc_curr * turning_radius > distance_limit) {
 
         if (fully_extends)
           *fully_extends = 0;
@@ -225,7 +224,7 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
       list_states->push_back(state_curr);
       list_inputs->push_back(input_curr);
 
-      if (t_inc_curr * TURNING_RADIUS + d_inc_curr > distance_limit) {
+      if (t_inc_curr * turning_radius + d_inc_curr > distance_limit) {
 
         if (fully_extends)
           *fully_extends = 0;
@@ -249,11 +248,11 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
 
       (*state_curr)[0] =
           x_s2 +
-          TURNING_RADIUS *
+          turning_radius *
               cos(direction_s2 * (t_inc_curr - t_increment_s2) + t_s2);
       (*state_curr)[1] =
           y_s2 +
-          TURNING_RADIUS *
+          turning_radius *
               sin(direction_s2 * (t_inc_curr - t_increment_s2) + t_s2);
       (*state_curr)[2] = direction_s2 * (t_inc_curr - t_increment_s2) + t_s2 +
                          ((direction_s2 == 1) ? M_PI_2 : 3.0 * M_PI_2);
@@ -262,13 +261,13 @@ int smp::extender_dubins<typeparams>::extend_dubins_spheres(
       while ((*state_curr)[2] > 2 * M_PI)
         (*state_curr)[2] -= 2 * M_PI;
 
-      (*input_curr)[0] = t_inc_rel * TURNING_RADIUS;
+      (*input_curr)[0] = t_inc_rel * turning_radius;
       (*input_curr)[1] = ((comb_no == 2) || (comb_no == 3)) ? -1 : 1;
 
       list_states->push_back(state_curr);
       list_inputs->push_back(input_curr);
 
-      if ((t_inc_curr_prev + t_inc_curr) * TURNING_RADIUS + d_inc_curr >
+      if ((t_inc_curr_prev + t_inc_curr) * turning_radius + d_inc_curr >
           distance_limit) {
 
         if (fully_extends)
@@ -299,16 +298,16 @@ double smp::extender_dubins<typeparams>::extend_dubins_all(
   double sin_tf = sin(-tf);
   double cos_tf = cos(-tf);
 
-  double si_left[3] = {(*state_ini)[0] + TURNING_RADIUS * sin_ti,
-                       (*state_ini)[1] + TURNING_RADIUS * cos_ti,
+  double si_left[3] = {(*state_ini)[0] + turning_radius * sin_ti,
+                       (*state_ini)[1] + turning_radius * cos_ti,
                        ti + 3 * M_PI_2};
-  double si_right[3] = {(*state_ini)[0] - TURNING_RADIUS * sin_ti,
-                        (*state_ini)[1] - TURNING_RADIUS * cos_ti, ti + M_PI_2};
-  double sf_left[3] = {(*state_fin)[0] + TURNING_RADIUS * sin_tf,
-                       (*state_fin)[1] + TURNING_RADIUS * cos_tf,
+  double si_right[3] = {(*state_ini)[0] - turning_radius * sin_ti,
+                        (*state_ini)[1] - turning_radius * cos_ti, ti + M_PI_2};
+  double sf_left[3] = {(*state_fin)[0] + turning_radius * sin_tf,
+                       (*state_fin)[1] + turning_radius * cos_tf,
                        tf + 3 * M_PI_2};
-  double sf_right[3] = {(*state_fin)[0] - TURNING_RADIUS * sin_tf,
-                        (*state_fin)[1] - TURNING_RADIUS * cos_tf, tf + M_PI_2};
+  double sf_right[3] = {(*state_fin)[0] - turning_radius * sin_tf,
+                        (*state_fin)[1] - turning_radius * cos_tf, tf + M_PI_2};
 
   // 2. extend all four spheres
   double times[4];
