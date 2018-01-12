@@ -34,6 +34,8 @@ int smp::rrtstar<typeparams>::initialize(state_t *initial_state_in) {
 
   this->root_vertex->data.total_cost = 0;
 
+  this->planning_time = (this->clock.now() - this->clock.now()).count() / 1e9;
+
   return 1;
 }
 
@@ -72,8 +74,14 @@ int smp::rrtstar<typeparams>::propagate_cost(vertex_t *vertex_in,
   return 1;
 }
 
+template <class typeparams>
+float smp::rrtstar<typeparams>::get_planning_time() {
+  return planning_time;
+}
+
 template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
+  auto start_time = clock.now();
   // TODO: Check whether the rrtstar is initialized properly (including its base
   // classes)
 
@@ -82,6 +90,10 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
   this->sampler.sample(&state_sample);
   if (this->collision_checker.check_collision_state(state_sample) == 0) {
     delete state_sample;
+
+    auto end_time = clock.now();
+    planning_time += ((end_time - start_time).count() / 1e9);
+
     return 0;
   }
 
@@ -125,7 +137,8 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
       // 5. Find the parent state
       vertex_t *vertex_parent = vertex_nearest;
       trajectory_t *trajectory_parent = trajectory;
-      std::list<state_t *> *intermediate_vertices_parent = intermediate_vertices;
+      std::list<state_t *> *intermediate_vertices_parent =
+          intermediate_vertices;
 
       double cost_trajectory_from_parent =
           this->cost_evaluator.evaluate_cost_trajectory(vertex_parent->state,
@@ -159,7 +172,8 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
           // Attempt an extension from vertex_curr to the extended state
           trajectory_t *trajectory_curr = new trajectory_t;
-          std::list<state_t *> *intermediate_vertices_curr = new std::list<state_t *>;
+          std::list<state_t *> *intermediate_vertices_curr =
+              new std::list<state_t *>;
           exact_connection = -1;
           if (this->extender.extend(vertex_curr->state, state_extended,
                                     &exact_connection, trajectory_curr,
@@ -235,7 +249,8 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
 
           // Attempt an extension from the extended vertex to the current vertex
           trajectory_t *trajectory_curr = new trajectory_t;
-          std::list<state_t *> *intermediate_vertices_curr = new std::list<state_t *>;
+          std::list<state_t *> *intermediate_vertices_curr =
+              new std::list<state_t *>;
           bool free_tmp_memory = true;
           exact_connection = -1;
           if (this->extender.extend(vertex_last->state, vertex_curr->state,
@@ -290,6 +305,9 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
       delete state_sample;
       if (state_extended)
         delete state_extended;
+
+      auto end_time = clock.now();
+      planning_time += ((end_time - start_time).count() / 1e9);
       return 1;
     }
   }

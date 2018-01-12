@@ -13,6 +13,8 @@
 
 #include <smp/components/cost_evaluators/base.h>
 
+#include <chrono>
+
 namespace smp {
 
 //! Vertex data structure for the RRT* algorithm.
@@ -98,6 +100,15 @@ private:
 
 protected:
   /**
+   * Total planning time.
+   */
+  float planning_time;
+
+  /**
+   * A steady clock
+   */
+  std::chrono::steady_clock clock;
+  /**
    * @name Components
    */
   //@{
@@ -180,6 +191,8 @@ planner is
    * @returns Returns 1 for success, and a non-positive number for failure.
    */
   int initialize(state_t *initial_state_in = 0);
+
+  float get_planning_time();
 
   /**
    * @name Component initializer functions
