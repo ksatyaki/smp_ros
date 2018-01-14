@@ -62,11 +62,13 @@ int smp::minimum_time_reachability<
     if (min_cost_vertex == NULL) {
       min_cost_vertex = vertex_in;
       std::cout << "COST -- : " << vertex_in->data.total_cost << std::endl;
+      fflush(stdout);
       update_trajectory = true;
     }
 
-    if ((vertex_in->data.total_cost < min_cost_vertex->data.total_cost)) {
+    else if ((vertex_in->data.total_cost <= min_cost_vertex->data.total_cost)) {
       std::cout << "COST -- : " << vertex_in->data.total_cost << std::endl;
+      fflush(stdout);
       min_cost_vertex = vertex_in;
       update_trajectory = true;
     }
