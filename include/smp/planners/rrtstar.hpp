@@ -186,7 +186,7 @@ template <class typeparams> int smp::rrtstar<typeparams>::iteration() {
               // trajectory
               double cost_trajectory_from_curr =
                   this->cost_evaluator.evaluate_cost_trajectory(
-                      vertex_parent->state, trajectory_curr);
+                      vertex_curr->state, trajectory_curr);
               double cost_curr =
                   vertex_curr->data.total_cost + cost_trajectory_from_curr;
 

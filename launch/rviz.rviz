@@ -171,12 +171,13 @@ Visualization Manager:
       Marker Topic: /visualization_markers
       Name: MarkerArray
       Namespaces:
-        cliffmap: true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
+    Default Light: true
     Fixed Frame: map
     Frame Rate: 30
   Name: root
@@ -207,11 +208,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 121.00311279296875
+      Scale: 80.13821411132812
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 4.965029239654541
-      Y: 2.6590168476104736
+      X: 2.5849223136901855
+      Y: 5.022598743438721
     Saved: ~
 Window Geometry:
   Displays:

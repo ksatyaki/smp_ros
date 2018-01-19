@@ -61,19 +61,18 @@ int smp::minimum_time_reachability<
 
     if (min_cost_vertex == NULL) {
       min_cost_vertex = vertex_in;
-      std::cout << "COST -- : " << vertex_in->data.total_cost << std::endl;
-      fflush(stdout);
       update_trajectory = true;
     }
 
     else if ((vertex_in->data.total_cost <= min_cost_vertex->data.total_cost)) {
-      std::cout << "COST -- : " << vertex_in->data.total_cost << std::endl;
-      fflush(stdout);
       min_cost_vertex = vertex_in;
       update_trajectory = true;
     }
 
     if (update_trajectory == true) {
+
+      std::cout << "UPDATING TRAJECTORY. NEW LOWEST COST -- : " << vertex_in->data.total_cost << std::endl;
+      fflush(stdout);
 
       min_cost_trajectory.clear_delete();
 
@@ -86,24 +85,25 @@ int smp::minimum_time_reachability<
         edge_t *edge_curr = vertex_ptr->incoming_edges.back();
 
         trajectory_t *trajectory_curr = edge_curr->trajectory_edge;
-        min_cost_trajectory.list_states.push_back(
+        min_cost_trajectory.list_states.push_front(
             new state_t(*(vertex_ptr->state)));
 
         for (typename std::list<state_t *>::reverse_iterator it_state =
                  trajectory_curr->list_states.rbegin();
              it_state != trajectory_curr->list_states.rend(); it_state++) {
-          min_cost_trajectory.list_states.push_back(new state_t(**it_state));
+          min_cost_trajectory.list_states.push_front(new state_t(**it_state));
         }
 
         for (typename std::list<input_t *>::reverse_iterator it_input =
                  trajectory_curr->list_inputs.rbegin();
              it_input != trajectory_curr->list_inputs.rend(); it_input++) {
-          min_cost_trajectory.list_inputs.push_back(new input_t(**it_input));
+          min_cost_trajectory.list_inputs.push_front(new input_t(**it_input));
         }
 
         vertex_ptr = edge_curr->vertex_src;
       }
 
+      //std::cout << "Min Cost Traj contains: " << min_cost_trajectory.list_states.size() << " states";
       // Call all the update functions
       for (typename std::list<update_func_t>::iterator it_func =
                list_update_functions.begin();
@@ -203,13 +203,13 @@ int smp::minimum_time_reachability<typeparams, NUM_DIMENSIONS>::get_solution(
            min_cost_trajectory.list_states.begin();
        it_state != min_cost_trajectory.list_states.end(); it_state++) {
 
-    trajectory_out.list_states.push_front(new state_t(**it_state));
+    trajectory_out.list_states.push_back(new state_t(**it_state));
   }
 
   for (typename std::list<input_t *>::iterator it_input =
            min_cost_trajectory.list_inputs.begin();
        it_input != min_cost_trajectory.list_inputs.end(); it_input++) {
-    trajectory_out.list_inputs.push_front(new input_t(**it_input));
+    trajectory_out.list_inputs.push_back(new input_t(**it_input));
   }
 
   return 1;
