@@ -128,22 +128,6 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Alpha: 1
-      Arrow Length: 0.30000001192092896
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz/PoseArray
-      Color: 255; 25; 0
-      Enabled: false
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: PoseArray
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic: /path
-      Unreliable: false
-      Value: false
-    - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
       Color: 255; 0; 4
@@ -208,11 +192,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 80.13821411132812
+      Scale: 76.10489654541016
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 2.5849223136901855
-      Y: 5.022598743438721
+      X: 2.980006217956543
+      Y: 5.09645938873291
     Saved: ~
 Window Geometry:
   Displays:

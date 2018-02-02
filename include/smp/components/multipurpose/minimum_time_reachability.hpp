@@ -71,7 +71,8 @@ int smp::minimum_time_reachability<
 
     if (update_trajectory == true) {
 
-      std::cout << "UPDATING TRAJECTORY. NEW LOWEST COST -- : " << vertex_in->data.total_cost << std::endl;
+      std::cout << "UPDATING TRAJECTORY. NEW LOWEST COST -- : "
+                << vertex_in->data.total_cost << std::endl;
       fflush(stdout);
 
       min_cost_trajectory.clear_delete();
@@ -103,7 +104,8 @@ int smp::minimum_time_reachability<
         vertex_ptr = edge_curr->vertex_src;
       }
 
-      //std::cout << "Min Cost Traj contains: " << min_cost_trajectory.list_states.size() << " states";
+      // std::cout << "Min Cost Traj contains: " <<
+      // min_cost_trajectory.list_states.size() << " states";
       // Call all the update functions
       for (typename std::list<update_func_t>::iterator it_func =
                list_update_functions.begin();

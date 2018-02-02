@@ -220,13 +220,13 @@ int smp::planner<typeparams>::insert_trajectory(
   //   vertex using the final state in trajectory_in
   if (vertex_dst == NULL) {
     state_t *final_state = trajectory_in->list_states.back();
-    trajectory_in->list_states.pop_back();
 
     vertex_dst = new vertex_t;
     vertex_dst->state = final_state;
 
     this->insert_vertex(vertex_dst); // Insert the new vertex into the graph
   }
+  trajectory_in->list_states.pop_back();
 
   // Create the new edge
   edge_t *edge = new edge_t;
