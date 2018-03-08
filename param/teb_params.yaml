@@ -14,10 +14,10 @@ TebLocalPlannerROS:
     
  # Robot
          
- max_vel_x: 0.8
+ max_vel_x: 0.9
  max_vel_x_backwards: 0.1
  max_vel_y: 0.0
- max_vel_theta: 1.0 # the angular velocity is also bounded by min_turning_radius in case of a carlike robot (r = v / omega)
+ max_vel_theta: 1.8 # the angular velocity is also bounded by min_turning_radius in case of a carlike robot (r = v / omega)
  acc_lim_x: 0.5
  acc_lim_theta: 0.5
 
@@ -67,7 +67,7 @@ TebLocalPlannerROS:
 
  # Homotopy Class Planner
 
- enable_homotopy_class_planning: False
+ enable_homotopy_class_planning: True
  enable_multithreading: True
  simple_exploration: False
  max_number_classes: 4
