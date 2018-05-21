@@ -8,6 +8,7 @@ set(MRPT_DONT_USE_DBG_LIBS 1)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
+  costmap_2d
   roscpp
   std_msgs
   tf
@@ -20,8 +21,8 @@ find_package(Boost REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES smp_ros_external kdtree
-  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core
-  DEPENDS Boost
+  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core costmap_2d
+  DEPENDS Boost MRPT
 )
 
 include_directories(

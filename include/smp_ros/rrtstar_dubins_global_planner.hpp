@@ -15,9 +15,6 @@
 #include <smp/planner_utils/vertex_edge.hpp>
 
 // ROS headers
-#include <angles/angles.h>
-#include <base_local_planner/costmap_model.h>
-#include <base_local_planner/world_model.h>
 #include <costmap_2d/costmap_2d.h>
 #include <costmap_2d/costmap_2d_ros.h>
 #include <geometry_msgs/PoseArray.h>
