@@ -34,7 +34,6 @@ void mrptMapFromROSMsg(
       map->setCell(w, h, value);
     }
   }
-  /* [DEBUG] */ map->saveAsBitmapFile("/home/chitt/remap.png");
 }
 
 namespace smp_ros {
