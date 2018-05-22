@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>smp_ros</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>The smp_ros package</description>
 
   <maintainer email="chittaranjan.swaminathan@oru.se">Chittaranjan Srinivas Swaminathan</maintainer>
