@@ -20,7 +20,7 @@ find_package(Boost REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES smp_ros_external kdtree
+  LIBRARIES smp_ros_external smp_ros_kdtree rrtstar_dubins_global_planner
   CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core costmap_2d
   DEPENDS Boost MRPT
 )
@@ -36,50 +36,27 @@ add_library(smp_ros_external
   src/external_libraries/inc_mu_mc/ms.cpp
   src/external_libraries/inc_mu_mc/pt.cpp
 )
-
-add_library(kdtree src/external_libraries/kdtree/kdtree.c)
-
-add_executable(test_rrtstar src/test_rrtstar.cpp)
-add_executable(test_rrtstar_dubins src/test_rrtstar_dubins.cpp)
-add_executable(test_rrtstar_dubins_ros src/test_rrtstar_dubins_ros.cpp)
-add_executable(test_double_integrator_ros src/test_double_integrator_ros.cpp)
-
-target_link_libraries(test_rrtstar smp_ros_external kdtree)
-target_link_libraries(test_rrtstar_dubins smp_ros_external kdtree)
-target_link_libraries(test_rrtstar_dubins_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
-target_link_libraries(test_double_integrator_ros smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
-
-
+add_library(smp_ros_kdtree src/external_libraries/kdtree/kdtree.c)
 add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
-target_link_libraries(rrtstar_dubins_global_planner smp_ros_external kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+install(TARGETS smp_ros_kdtree smp_ros_external rrtstar_dubins_global_planner
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
-## Mark executables and/or libraries for installation
-# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
-
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+install(DIRECTORY include/smp/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}/../smp
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
 
 #############
 ## Testing ##
