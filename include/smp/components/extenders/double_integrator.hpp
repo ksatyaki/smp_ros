@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018 Sertac Karaman
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
 #ifndef _SMP_SYSTEM_DOUBLE_INTEGRATOR_HPP_
 #define _SMP_SYSTEM_DOUBLE_INTEGRATOR_HPP_
 
@@ -95,7 +113,8 @@ double extend_with_time_optimal_control_one_axis(
       }
       t_tot_1 = t0_1 + t1_1 + ti_1;
 
-      // std::cout << "Times control 1 : " << t0_1 << " : " << t0_1 + ti_1 << " : "
+      // std::cout << "Times control 1 : " << t0_1 << " : " << t0_1 + ti_1 << "
+      // : "
       // << t0_1 + ti_1 + t1_1 << std::endl << std::endl;
     }
   }
@@ -147,7 +166,8 @@ double extend_with_time_optimal_control_one_axis(
       t_tot_2 = t0_2 + t1_2 + ti_2;
 
       // std::cout << std::endl;
-      // std::cout << "Times control 2 : " << t0_2 << " : " << t0_2 + ti_2 << " : "
+      // std::cout << "Times control 2 : " << t0_2 << " : " << t0_2 + ti_2 << "
+      // : "
       // << t0_2 + ti_2 + t1_2 << std::endl;
     }
   }
@@ -286,7 +306,8 @@ int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::
   double max_control_a1 = INPUT_CONSTRAINT_MAX;
   double max_control_a2 = INPUT_CONSTRAINT_MAX;
 
-  // std::cout << "time_a1 : " << time_a1 << " :::: time_a2 : "  << time_a2 << std::endl;
+  // std::cout << "time_a1 : " << time_a1 << " :::: time_a2 : "  << time_a2 <<
+  // std::endl;
 
   if ((time_a1 < 0.0) || (time_a2 < 0.0)) {
     std::cout << "No traj feasible" << std::endl;

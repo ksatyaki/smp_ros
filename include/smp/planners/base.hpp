@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018 Sertac Karaman
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
 #ifndef _SMP_PLANNER_BASE_HPP_
 #define _SMP_PLANNER_BASE_HPP_
 
@@ -44,7 +62,8 @@ template <class typeparams> smp::planner<typeparams>::~planner() {
 template <class typeparams> int smp::planner<typeparams>::initialize() {
 
   // Delete all edges and vertices
-  for (typename std::list<vertex_t *>::iterator iter_vertex = list_vertices.begin();
+  for (typename std::list<vertex_t *>::iterator iter_vertex =
+           list_vertices.begin();
        iter_vertex != list_vertices.end(); iter_vertex++) {
     vertex_t *vertex_curr = *iter_vertex;
     for (typename std::list<edge_t *>::iterator iter_edge =

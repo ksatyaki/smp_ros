@@ -3,7 +3,25 @@
 
   This file implements a collision checker for MRPT Occupancy Maps. Code
   borrowed from Federico Pecora.
-*/
+
+  * Copyright (C) 2018 Chittaranjan Srinivas Swaminathan
+  * Copyright (C) 2018 Federico Pecora
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>
+  *
+  */
+
 #pragma once
 
 #include <mrpt/maps/COccupancyGridMap2D.h>
@@ -44,9 +62,7 @@ public:
   inline collision_checker_mc_mrpt(
       const std::shared_ptr<mm::COccupancyGridMap2D> &_map, double radius,
       const std::shared_ptr<mrpt::math::CPolygon> &footprint)
-      : map(_map), inflation_radius(radius), robot_footprint(footprint) {
-
-  }
+      : map(_map), inflation_radius(radius), robot_footprint(footprint) {}
 
   inline ~collision_checker_mc_mrpt() {}
 

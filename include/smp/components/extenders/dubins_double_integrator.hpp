@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018 Sertac Karaman
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
 #ifndef _SMP_SYSTEM_DUBINS_DOUBLE_INTEGRATOR_HPP_
 #define _SMP_SYSTEM_DUBINS_DOUBLE_INTEGRATOR_HPP_
 
@@ -352,7 +370,8 @@ int smp::extender_dubins_double_integrator<typeparams>::
 template <class typeparams>
 int smp::extender_dubins_double_integrator<typeparams>::extend_dubins_di(
     state_t *state_ini, state_t *state_fin, int *fully_extends,
-    std::list<state_t *> *list_states_out, std::list<input_t *> *list_inputs_out) {
+    std::list<state_t *> *list_states_out,
+    std::list<input_t *> *list_inputs_out) {
 
   *fully_extends = 0;
 
