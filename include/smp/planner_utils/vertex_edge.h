@@ -2,11 +2,9 @@
   \brief An implementation of the vertex and edge components in the graph.
 
   Provides an implementation of the vertex and edge components in the graph.
-  Both classes
-  are defined as templates that take the types of the state, input, and the data
-  stored in
-  the vertices as well as the type of the data that is stored in the edges as an
-  argument.
+  Both classes are defined as templates that take the types of the state, input,
+  and the data stored in the vertices as well as the type of the data that is
+  stored in the edges as an argument.
 
   * Copyright (C) 2018 Sertac Karaman
   *
@@ -33,17 +31,12 @@
 #include <list>
 
 //! This parameter can be set to one for fast vertex deletion.
-/*!
-  The planner maintains a list of all the vertices present in the graph. If this
-  parameter is set to one, then each vertex includes a pointer to its location
-  in
-  the list, which makes vertex deletion faster. However, it introduces the
-  overhead
-  of maintaining this variable, which some users may not like. This variable
-  should
-  be set to one when there is intense vertex deletion, e.g., when using a branch
-  and
-  bound heuristic.
+/*! The planner maintains a list of all the vertices present in the graph. If
+  this parameter is set to one, then each vertex includes a pointer to its
+  location in the list, which makes vertex deletion faster. However, it
+  introduces the overhead of maintaining this variable, which some users may not
+  like. This variable should be set to one when there is intense vertex
+  deletion, e.g., when using a branch and bound heuristic.
  */
 #define _SMP_FAST_VERTEX_DELETE 1
 

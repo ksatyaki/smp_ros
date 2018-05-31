@@ -38,16 +38,12 @@
 namespace smp {
 
 //! Vertex data for minimum-time reachability.
-/*!
-  This data structure is attached to each vertex in the graph maintained by the
-  planner
-  algorithm. The data structure includes two variables. One variable indicates
-  whether the associated
-  vertex lies inside the goal region. Another variables keeps track of the cost
-  to reach
-  this particular vertex starting from the root vertex. The latter variable is
-  particularly
-  created to work with teh RRT* algorithm.
+/*! This data structure is attached to each vertex in the graph maintained by
+  the planner algorithm. The data structure includes two variables. One variable
+  indicates whether the associated vertex lies inside the goal region. Another
+  variables keeps track of the cost to reach this particular vertex starting
+  from the root vertex. The latter variable is particularly created to work with
+  teh RRT* algorithm.
 */
 class minimum_time_reachability_vertex_data : public rrtstar_vertex_data {
 
@@ -69,12 +65,10 @@ class minimum_time_reachability_edge_data : public rrtstar_edge_data {};
 //! A combination of the minimum-time cost evaluator and the reachability model
 //! checker
 /*!
-  Combining the minimum-time cost evaluator and the reachability model checker,
-  this class
-  is able to keep track of the minimum-time that reaches the goal region. The
-  class constitutes
-  a good example of multiple-purpose algorithm component made possible with
-  mutliple inheritance.
+  Combining the minimum-time cost evaluator and the reachability model
+  checker, this class is able to keep track of the minimum-time that reaches the
+  goal region. The class constitutes a good example of multiple-purpose
+  algorithm component made possible with mutliple inheritance.
 
   \ingroup model_checkers
   \ingroup cost_evaluators
@@ -220,4 +214,4 @@ template <int NUM_DIMENSIONS>
 std::array<double, NUM_DIMENSIONS>
 default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
                           const std::array<double, NUM_DIMENSIONS> &goal);
-}
+} // namespace smp

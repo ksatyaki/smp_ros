@@ -31,12 +31,9 @@ namespace smp {
 
 //! The abstract class that specifies the structure of the cost evalutor
 //! component.
-/*!
-  This class implements the abstract cost evaluator class, which provides one
-  main
-  method that returns the cost of a trajectory starting from a given initial
-  state
-  a reaching a given final vertex.
+/*! This class implements the abstract cost evaluator class, which provides one
+  main method that returns the cost of a trajectory starting from a given
+  initial state a reaching a given final vertex.
 
   \ingroup cost_evaluators
 */
