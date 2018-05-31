@@ -1,62 +1,90 @@
-/*
- * Copyright (C) 2018 Sertac Karaman
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
- */
+/*! \file trajectory.h
+  \brief Definition of the trajectory class
 
-#ifndef _SMP_TRAJECTORY_HPP_
-#define _SMP_TRAJECTORY_HPP_
+  * Copyright (C) 2018 Sertac Karaman
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>
+  *
+  */
 
-#include <smp/planner_utils/trajectory.h>
+#ifndef _SMP_TRAJECTORY_H_
+#define _SMP_TRAJECTORY_H_
 
-template <class typeparams> smp::trajectory<typeparams>::trajectory() {}
+#include <list>
 
-template <class typeparams> smp::trajectory<typeparams>::~trajectory() {
+namespace smp {
 
-  this->clear_delete();
-}
+//! Trajectory definition as a states with interleaving inputs.
+/*!
+  The Trajectory class, composed of a list of states and a list of inputs,
+  is an implementation of the notion of a trajectory that connects two given
+  states in the graph.
 
-template <class typeparams> int smp::trajectory<typeparams>::clear() {
+  \ingroup graphs
+*/
+template <class State, class Input> class Trajectory {
 
-  // Clear the list of states and the list of inputs.
-  list_states.clear();
-  list_inputs.clear();
+public:
+  //! A list of the states in the trajectory.
+  std::list<State *> list_states;
 
-  return 1;
-}
+  //! A list of the inputs in the trajectory.
+  std::list<Input *> list_inputs;
 
-template <class typeparams> int smp::trajectory<typeparams>::clear_delete() {
+  Trajectory() {}
+  ~Trajectory() { this->clear_delete(); }
 
-  // Free all the memory occupied by the states in the list.
-  for (typename std::list<state_t *>::iterator iter_state = list_states.begin();
-       iter_state != list_states.end(); iter_state++) {
-    state_t *state_curr = *iter_state;
-    delete state_curr;
+  //! Clears the trajectory.
+  /*! This function clears both the state list and the input list in the
+    trajectory. But, it does NOT attempt to free the memory occupied by the said
+    states and inputs.
+  */
+  int clear() {
+    list_states.clear();
+    list_inputs.clear();
+    return 1;
   }
 
-  // Free all the memory occupied by the inputs in the list.
-  for (typename std::list<input_t *>::iterator iter_input = list_inputs.begin();
-       iter_input != list_inputs.end(); iter_input++) {
-    input_t *input_curr = *iter_input;
-    delete input_curr;
+  //! Clears the trajectory and frees the memory.
+  /*! This function clears both the state list and the input list in the
+    trajectory. It also frees the memory occupied by the said states and the
+    inputs, by calling the delete operator with each state and input present in
+    the lists.
+  */
+  int clear_delete() {
+
+    // Free all the memory occupied by the states in the list.
+    for (typename std::list<State *>::iterator iter_state = list_states.begin();
+         iter_state != list_states.end(); iter_state++) {
+      State *state_curr = *iter_state;
+      delete state_curr;
+    }
+
+    // Free all the memory occupied by the inputs in the list.
+    for (typename std::list<Input *>::iterator iter_input = list_inputs.begin();
+         iter_input != list_inputs.end(); iter_input++) {
+      Input *input_curr = *iter_input;
+      delete input_curr;
+    }
+
+    // Clear the list of states and the list of inputs.
+    this->clear();
+
+    return 1;
   }
 
-  // Clear the list of states and the list of inputs.
-  this->clear();
-
-  return 1;
-}
+};
+} // namespace smp
 
 #endif
