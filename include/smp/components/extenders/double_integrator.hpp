@@ -266,14 +266,11 @@ int extend_with_effort_optimal_control_one_axis(
   return 1;
 }
 
-template <class typeparams, int NUM_DIMENSIONS>
-int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::
+template <int NUM_DIMENSIONS>
+int smp::ExtenderDoubleIntegrator<NUM_DIMENSIONS>::
     extend_with_optimal_control(state_t *state_ini, state_t *state_fin,
                                 std::list<state_t *> *list_states_out,
                                 std::list<input_t *> *list_inputs_out) {
-
-  // *states_all_out = NULL;
-  // *inputs_all_out = NULL;
 
   list_states_out->clear();
   list_inputs_out->clear();
@@ -548,18 +545,16 @@ int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::
   return 1;
 }
 
-template <class typeparams, int NUM_DIMENSIONS>
-smp::extender_double_integrator<typeparams,
-                                NUM_DIMENSIONS>::extender_double_integrator() {}
+template <int NUM_DIMENSIONS>
+smp::ExtenderDoubleIntegrator<NUM_DIMENSIONS>::ExtenderDoubleIntegrator() {}
 
-template <class typeparams, int NUM_DIMENSIONS>
-smp::extender_double_integrator<typeparams,
-                                NUM_DIMENSIONS>::~extender_double_integrator() {
+template <int NUM_DIMENSIONS>
+smp::ExtenderDoubleIntegrator<NUM_DIMENSIONS>::~ExtenderDoubleIntegrator() {
 
 }
 
-template <class typeparams, int NUM_DIMENSIONS>
-int smp::extender_double_integrator<typeparams, NUM_DIMENSIONS>::extend(
+template <int NUM_DIMENSIONS>
+int smp::ExtenderDoubleIntegrator<NUM_DIMENSIONS>::extend(
     state_t *state_from_in, state_t *state_towards_in,
     int *exact_connection_out, trajectory_t *trajectory_out,
     std::list<state_t *> *intermediate_vertices_out) {

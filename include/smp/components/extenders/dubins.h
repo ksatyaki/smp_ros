@@ -42,7 +42,7 @@ namespace smp {
 
   \ingroup states
 */
-class state_dubins : public state_array_double<3> {};
+class StateDubins : public StateArrayDouble<3> {};
 
 //! Implementation of the input data structure for the Dubins car dynamics.
 /*!
@@ -53,7 +53,7 @@ class state_dubins : public state_array_double<3> {};
 
   \ingroup inputs
 */
-class input_dubins : public input_array_double<2> {};
+class InputDubins : public InputArrayDouble<2> {};
 
 //! Implements the extender function with Dubins car dynamics.
 /*!
@@ -61,49 +61,32 @@ class input_dubins : public input_array_double<2> {};
 
   \ingroup extenders
 */
-template <class typeparams>
-class extender_dubins : public extender_base<typeparams> {
+class ExtenderDubins : public ExtenderBase<StateDubins, InputDubins> {
 
-  typedef typename typeparams::state state_t;
-  typedef typename typeparams::input input_t;
-  typedef typename typeparams::vertex_data vertex_data_t;
-  typedef typename typeparams::edge_data edge_data_t;
-
-  typedef vertex<typeparams> vertex_t;
-  typedef edge<typeparams> edge_t;
-
-  typedef trajectory<typeparams> trajectory_t;
+  using TrajectoryDubins = Trajectory<StateDubins, InputDubins>;
 
   double turning_radius{1.0};
 
   int extend_dubins_spheres(double x_s1, double y_s1, double t_s1, double x_s2,
                             double y_s2, double t_s2, int comb_no,
                             int *fully_extends,
-                            std::list<state_t *> *list_states,
-                            std::list<input_t *> *list_inputs);
+                            std::list<StateDubins *> *list_states,
+                            std::list<InputDubins *> *list_inputs);
 
-  double extend_dubins_all(state_t *state_ini, state_t *state_fin,
+  double extend_dubins_all(StateDubins *state_ini, StateDubins *state_fin,
                            int *fully_extends,
-                           std::list<state_t *> *list_states_out,
-                           std::list<input_t *> *list_inputs_out);
+                           std::list<StateDubins *> *list_states_out,
+                           std::list<InputDubins *> *list_inputs_out);
 
 public:
-  extender_dubins();
-  ~extender_dubins();
-
-  int ex_update_insert_vertex(vertex_t *vertex_in);
-
-  int ex_update_insert_edge(edge_t *edge_in);
-
-  int ex_update_delete_vertex(vertex_t *vertex_in);
-
-  int ex_update_delete_edge(edge_t *edge_in);
+  ExtenderDubins();
+  ~ExtenderDubins();
 
   inline void set_turning_radius(double radius) { turning_radius = radius; }
 
-  int extend(state_t *state_from_in, state_t *state_towards_in,
-             int *exact_connection_out, trajectory_t *trajectory_out,
-             std::list<state_t *> *intermediate_vertices_out);
+  int extend(StateDubins *state_from_in, StateDubins *state_towards_in,
+             int *exact_connection_out, TrajectoryDubins *trajectory_out,
+             std::list<StateDubins *> *intermediate_vertices_out);
 };
 }
 

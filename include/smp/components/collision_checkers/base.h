@@ -35,14 +35,11 @@
 namespace smp {
 
 //! An abstract collision checker.
-/*!
-  The collision checker function provides the following two functions: check
-  whether
-  a given state is collision-free, and check whether a given trajectory is
-  collision free.
-  The collision check function can be thought of as a generic check as to
-  whether or not
-  the new trajectory is suitable to be included in the graph.
+/*! The collision checker function provides the following two functions: check
+  whether a given state is collision-free, and check whether a given trajectory
+  is collision free. The collision check function can be thought of as a generic
+  check as to whether or not the new trajectory is suitable to be included in
+  the graph.
 
   \ingroup collision_checkers_base
 */

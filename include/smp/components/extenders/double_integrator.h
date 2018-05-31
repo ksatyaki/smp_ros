@@ -37,60 +37,43 @@ namespace smp {
 
 //! Implementation of the state data structure for the double integrator
 //! dynamics
-/*!
-  This class implements the state data structure for the double integrator
-  dynamics.
-  The number of state variables is twice number of dimensions, since for each
-  dimension
-  both position and velocity has to be stored. The positions are stored in the
-  usual order
-  first, and then the all velocities are stored in their usual order, in the
-  array.
+/*! This class implements the state data structure for the double integrator
+  dynamics. The number of state variables is twice number of dimensions, since
+  for each dimension both position and velocity has to be stored. The positions
+  are stored in the usual order first, and then the all velocities are stored in
+  their usual order, in the array.
 */
 template <int NUM_DIMENSIONS>
-class state_double_integrator : public state_array_double<NUM_DIMENSIONS * 2> {
-
-};
+class StateDoubleIntegrator : public StateArrayDouble<NUM_DIMENSIONS * 2> {};
 
 //! Implementation of the input data structure for the double integrator
 //! dynamics
-/*!
-  This class implements the input data structure for the double integrator
-  dynamics.
-  The number of input variables is one plus the dimensions. The extra input
-  variable,
-  placed in the beginning of the array, is used to store the time it takes to
-  execute the trajectory segment.
+/*! This class implements the input data structure for the double integrator
+  dynamics. The number of input variables is one plus the dimensions. The extra
+  input variable, placed in the beginning of the array, is used to store the
+  time it takes to execute the trajectory segment.
 */
 template <int NUM_DIMENSIONS>
-class input_double_integrator : public input_array_double<NUM_DIMENSIONS + 1> {
-
-};
+class InputDoubleIntegrator : public InputArrayDouble<NUM_DIMENSIONS + 1> {};
 
 //! Extender function with double integrator dynamics.
-/*!
-  This class implements an extender with double integrator dynamics. It is
-  intended
-  that the number of dimensions of the state space is a template argument for
-  the class.
-  However, this feature is not implemented yet. Currently, the double integrator
-  system works only in two dimensions (NUM_DIMENSIONS = 2), i.e., two positions
-  and their two velocities.
+/*! This class implements an extender with double integrator dynamics. It is
+  intended that the number of dimensions of the state space is a template
+  argument for the class. However, this feature is not implemented yet.
+  Currently, the double integrator system works only in two dimensions
+  (NUM_DIMENSIONS = 2), i.e., two positions and their two velocities.
 
   \ingroup extenders
 */
-template <class typeparams, int NUM_DIMENSIONS>
-class extender_double_integrator : public extender_base<typeparams> {
+template <int NUM_DIMENSIONS>
+class ExtenderDoubleIntegrator
+    : public ExtenderBase<StateDoubleIntegrator<NUM_DIMENSIONS>,
+                          InputDoubleIntegrator<NUM_DIMENSIONS>> {
 
-  typedef typename typeparams::state state_t;
-  typedef typename typeparams::input input_t;
-  typedef typename typeparams::vertex_data vertex_data_t;
-  typedef typename typeparams::edge_data edge_data_t;
-
-  typedef vertex<typeparams> vertex_t;
-  typedef edge<typeparams> edge_t;
-
-  typedef trajectory<typeparams> trajectory_t;
+  using state_t = StateDoubleIntegrator<NUM_DIMENSIONS>;
+  using input_t = InputDoubleIntegrator<NUM_DIMENSIONS>;
+  using trajectory_t = Trajectory<StateDoubleIntegrator<NUM_DIMENSIONS>,
+                                  InputDoubleIntegrator<NUM_DIMENSIONS>>;
 
   // // TODO: get back to appropriate velocity constraints.
   // double velocity_constraint_min[NUM_DIMENSIONS];
@@ -101,21 +84,13 @@ class extender_double_integrator : public extender_base<typeparams> {
                                   std::list<input_t *> *list_inputs_out);
 
 public:
-  extender_double_integrator();
-  ~extender_double_integrator();
-
-  int ex_update_insert_vertex(vertex_t *vertex_in) { return 1; }
-
-  int ex_update_insert_edge(edge_t *edge_in) { return 1; }
-
-  int ex_update_delete_vertex(vertex_t *vertex_in) { return 1; }
-
-  int ex_update_delete_edge(edge_t *edge_in) { return 1; }
+  ExtenderDoubleIntegrator();
+  ~ExtenderDoubleIntegrator();
 
   int extend(state_t *state_from_in, state_t *state_towards_in,
              int *exact_connection_out, trajectory_t *trajectory_out,
              std::list<state_t *> *intermediate_vertices_out);
 };
-}
+} // namespace smp
 
 #endif

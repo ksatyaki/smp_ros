@@ -24,26 +24,26 @@
 #include <iostream>
 
 template <int NUM_INPUTS>
-smp::input_array_double<NUM_INPUTS>::input_array_double() {
+smp::InputArrayDouble<NUM_INPUTS>::InputArrayDouble() {
 
   for (int i = 0; i < NUM_INPUTS; i++)
     input_vars[i] = 0.0;
 }
 
 template <int NUM_INPUTS>
-smp::input_array_double<NUM_INPUTS>::input_array_double(
-    const smp::input_array_double<NUM_INPUTS> &input_in) {
+smp::InputArrayDouble<NUM_INPUTS>::InputArrayDouble(
+    const smp::InputArrayDouble<NUM_INPUTS> &input_in) {
 
   for (int i = 0; i < NUM_INPUTS; i++)
     input_vars[i] = input_in.input_vars[i];
 }
 
 template <int NUM_INPUTS>
-smp::input_array_double<NUM_INPUTS>::~input_array_double() {}
+smp::InputArrayDouble<NUM_INPUTS>::~InputArrayDouble() {}
 
 template <int NUM_INPUTS>
-const smp::input_array_double<NUM_INPUTS> &smp::input_array_double<NUM_INPUTS>::
-operator=(const smp::input_array_double<NUM_INPUTS> &input_in) {
+const smp::InputArrayDouble<NUM_INPUTS> &smp::InputArrayDouble<NUM_INPUTS>::
+operator=(const smp::InputArrayDouble<NUM_INPUTS> &input_in) {
 
   if (&input_in != this) {
     for (int i = 0; i < NUM_INPUTS; i++)
@@ -54,7 +54,7 @@ operator=(const smp::input_array_double<NUM_INPUTS> &input_in) {
 }
 
 template <int NUM_INPUTS>
-double &smp::input_array_double<NUM_INPUTS>::operator[](int index_in) {
+double &smp::InputArrayDouble<NUM_INPUTS>::operator[](int index_in) {
 
   if ((index_in < NUM_INPUTS) && (index_in >= 0))
     return input_vars[index_in];

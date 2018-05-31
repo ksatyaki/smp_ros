@@ -33,7 +33,7 @@ namespace smp {
 
   \ingroup inputs
 */
-template <int NUM_INPUTS> class input_array_double {
+template <int NUM_INPUTS> class InputArrayDouble {
 
 public:
   //! Input variables array.
@@ -43,23 +43,22 @@ public:
   */
   double input_vars[NUM_INPUTS];
 
-  input_array_double();
-  ~input_array_double();
+  InputArrayDouble();
+  ~InputArrayDouble();
 
   /**
    * \brief The copy constructor
    */
-  input_array_double(const input_array_double<NUM_INPUTS> &input_in);
+  InputArrayDouble(const InputArrayDouble<NUM_INPUTS> &input_in);
 
   /**
    * \brief The equality operator
    *
    * Two inputs are equal if and only if all their components are equal. This
-   * function
-   * checks whether this criterion is satisfied.
+   * function checks whether this criterion is satisfied.
    */
-  const input_array_double<NUM_INPUTS> &
-  operator=(const input_array_double<NUM_INPUTS> &input_in);
+  const InputArrayDouble<NUM_INPUTS> &
+  operator=(const InputArrayDouble<NUM_INPUTS> &input_in);
 
   /**
    * \brief The bracket operator that returns the given element from the array.

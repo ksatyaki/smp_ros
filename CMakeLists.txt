@@ -37,14 +37,15 @@ add_library(smp_ros_external
   src/external_libraries/inc_mu_mc/pt.cpp
 )
 add_library(smp_ros_kdtree src/external_libraries/kdtree/kdtree.c)
-add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
-target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+add_library(smp src/smp/dubins.cpp)
+#add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
+#target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 
-install(TARGETS smp_ros_kdtree smp_ros_external rrtstar_dubins_global_planner
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+#install(TARGETS smp_ros_kdtree smp_ros_external rrtstar_dubins_global_planner
+#  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}

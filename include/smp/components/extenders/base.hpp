@@ -22,6 +22,4 @@
 #include <smp/components/extenders/base.h>
 
 #include <smp/planner_utils/trajectory.hpp>
-#include <smp/planner_utils/vertex_edge.hpp>
-
 #endif

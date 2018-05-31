@@ -33,7 +33,7 @@ namespace smp {
 
   \ingroup states
 */
-template <int NUM_STATES> class state_array_double {
+template <int NUM_STATES> class StateArrayDouble {
 
 public:
   //! State variables array.
@@ -43,23 +43,22 @@ public:
   */
   double state_vars[NUM_STATES];
 
-  state_array_double();
-  ~state_array_double();
+  StateArrayDouble();
+  ~StateArrayDouble();
 
   /**
    * \brief Copy constructor
    */
-  state_array_double(const state_array_double<NUM_STATES> &state_in);
+  StateArrayDouble(const StateArrayDouble<NUM_STATES> &state_in);
 
   /**
    * \brief Equality operator
    *
    * Two states are equal if and only if all their components are equal. This
-   * function
-   * checks whether this criterion is satisfied.
+   * function checks whether this criterion is satisfied.
    */
-  const state_array_double<NUM_STATES> &
-  operator=(const state_array_double<NUM_STATES> &state_in);
+  const StateArrayDouble<NUM_STATES> &
+  operator=(const StateArrayDouble<NUM_STATES> &state_in);
 
   /**
    * \brief The bracket operator that returns the given element from the array.
