@@ -37,7 +37,13 @@ add_library(smp_ros_external
   src/external_libraries/inc_mu_mc/pt.cpp
 )
 add_library(smp_ros_kdtree src/external_libraries/kdtree/kdtree.c)
-add_library(smp src/smp/dubins.cpp)
+add_library(smp
+  src/smp/extenders_dubins.cpp
+  src/smp/extenders_double_integrator.cpp
+  src/smp/extenders_posq.cpp)
+
+# Not a runtime test. Only testing compilation.
+add_executable(test_collision_checkers src/tests/test_collision_checkers.cpp)
 #add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
 #target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 
