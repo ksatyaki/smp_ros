@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <smp/vertex_edge.hp>
+#include <smp/vertex_edge.hpp>
 #include <list>
 
 namespace smp {
@@ -48,7 +48,7 @@ class Base {
   using edge_t = Edge<State, Input, VertexData, EdgeData>;
 
 public:
-  virtual ~distance_evaluator_base(){};
+  virtual ~Base(){};
 
   /**
    * \brief Update function for vertex insertion
