@@ -21,10 +21,11 @@
   *
   */
 
-#ifndef _SMP_PLANNER_PARAMETERS_H_
-#define _SMP_PLANNER_PARAMETERS_H_
+#pragma once
 
 namespace smp {
+
+namespace planners {
 
 //! Parameters for the RRG and the RRT* algorithms
 /*!
@@ -33,26 +34,26 @@ namespace smp {
   be handled using this class. The class provides user functions for easy and
   correct handling of the parameters.
 */
-class planner_parameters {
+class Parameters {
 
   // Phase parameter of the algorithm.
-  int phase;
+  int phase{2};
 
   // Gamma parameter in the Near vertices computation.
-  double gamma;
+  double gamma{20.0};
 
   // Dimensionality of the space in the Near vertices computation.
-  int dimension;
+  int dimension{3};
 
   // Maximum radius in the Near vertices computation.
-  int max_radius;
+  int max_radius{10.0};
 
   // The fixed radius parameter of the related feature.
-  double fixed_radius;
+  double fixed_radius{-1.0};
 
 public:
-  planner_parameters();
-  ~planner_parameters();
+  Parameters(){};
+  ~Parameters(){};
 
   /**
    * @name Algorithm parameter handlers
@@ -81,7 +82,15 @@ public:
    * @returns Returns 1 for success, and a non-positive number to indicate an
    * error.
    */
-  int set_phase(int phase_in);
+  int set_phase(int phase_in) {
+
+    if ((0 <= phase_in) && (phase_in <= 2)) {
+      phase = phase_in;
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   /**
    * \brief Returns the current phase parameter of the algorithm.
@@ -110,7 +119,15 @@ public:
    * @returns Returns 1 for success, and a non-positive number to indicate an
    * error.
    */
-  int set_gamma(double gamma_in);
+  int set_gamma(double gamma_in) {
+
+    if (0.0 < gamma_in) {
+      gamma = gamma_in;
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   /**
    * \brief Returns the current gamma number of the algorithm.
@@ -140,7 +157,15 @@ public:
    * @returns Returns 1 for success, and a non-positive number to indicate an
    * error.
    */
-  int set_dimension(int dimension_in);
+  int set_dimension(int dimension_in) {
+
+    if (2 <= dimension_in) {
+      dimension = dimension_in;
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   /**
    * \brief Returns the current dimension parameter of the algorithm.
@@ -173,7 +198,15 @@ public:
    * @returns Returns 1 for success, and a non-positive number to indicate an
    * error.
    */
-  int set_max_radius(double max_radius_in);
+  int set_max_radius(double max_radius_in) {
+
+    if (0 < max_radius_in) {
+      max_radius = max_radius_in;
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   /**
    * \brief Returns the current maximum radius parameter of the algorithm.
@@ -212,7 +245,15 @@ public:
    * @returns Returns 1 for success, and a non-positive number to indicate an
    * error.
    */
-  int set_fixed_radius(double fixed_radius_in);
+  int set_fixed_radius(double fixed_radius_in) {
+
+    if (fixed_radius_in > 0.0)
+      fixed_radius = fixed_radius_in;
+    else
+      fixed_radius = -1.0;
+
+    return 1;
+  }
 
   /**
    * \brief Resets the use of fixed radius parameter.
@@ -246,6 +287,5 @@ public:
 
   //@}
 };
-}
-
-#endif
+} // namespace planners
+} // namespace smp

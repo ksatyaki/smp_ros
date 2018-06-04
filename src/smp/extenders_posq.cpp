@@ -9,7 +9,7 @@
 #include <cmath>
 #include <cstdlib>
 
-#include <smp/extenders/posq.h>
+#include <smp/extenders/posq.hpp>
 
 namespace smp {
 namespace extenders {
