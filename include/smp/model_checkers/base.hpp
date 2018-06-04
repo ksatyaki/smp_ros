@@ -42,7 +42,7 @@ class Base {
 
   using edge_t = Edge<State, Input, VertexData, EdgeData>;
   using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
-  using trajectory_t = Trajectory<typeparams>;
+  using trajectory_t = Trajectory<State, Input>;
 
 public:
   /**

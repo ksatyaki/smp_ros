@@ -86,17 +86,19 @@ void RRTStarDubinsGlobalPlanner::initialize(
 
   // TODO: Inflation radius and footprint must be configurable.
   // sampler can't be std::shared_ptr
-  collision_checker = std::shared_ptr<CollisionCheckerMCMRPT>(
-      new CollisionCheckerMCMRPT(map, 0.15, footprint));
+  collision_checker = std::shared_ptr<
+      smp::collision_checkers::MultipleCirclesMRPT<State, Input>>(
+      new smp::collision_checkers::MultipleCirclesMRPT<State, Input>(
+          map, 0.15, footprint));
 
   // Sampler support should also be configurable.
-  smp::region<3> sampler_support;
+  smp::Region<3> sampler_support;
   sampler_support.center[0] = 0.0;
   sampler_support.size[0] = 10.0;
   sampler_support.center[1] = 0.0;
   sampler_support.size[1] = 10.0;
   sampler_support.center[2] = 0.0;
-  sampler_support.size[2] = 3.14;
+  sampler_support.size[2] = 2*3.14;
   sampler.set_support(sampler_support);
 }
 
@@ -105,11 +107,14 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
     const geometry_msgs::PoseStamped &goal,
     std::vector<geometry_msgs::PoseStamped> &plan) {
 
-  KDTreeDistanceEvaluator distance_evaluator;
-  MinimumTimeReachability min_time_reachability;
+  smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData, 3>
+      distance_evaluator;
+  smp::multipurpose::MinimumTimeReachability<State, Input, 3>
+      min_time_reachability;
 
-  RRTStar planner(sampler, distance_evaluator, extender, *collision_checker,
-                  min_time_reachability, min_time_reachability);
+  smp::planners::RRTStar<State, Input, VertexData, EdgeData, 3> planner(
+      sampler, distance_evaluator, extender, *collision_checker,
+      min_time_reachability, min_time_reachability);
 
   planner.parameters.set_phase(2);
   planner.parameters.set_gamma(std::max(map->getXMax(), map->getYMax()));
@@ -128,7 +133,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
 
   ros::Publisher path_pub = nh.advertise<geometry_msgs::PoseArray>("/path", 10);
 
-  smp::region<3> region_goal;
+  smp::Region<3> region_goal;
   region_goal.center[0] = goal.pose.position.x;
   region_goal.size[0] = 0.75;
 
@@ -142,7 +147,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
   min_time_reachability.set_goal_region(region_goal);
   min_time_reachability.set_distance_function(distanceBetweenStates);
 
-  StateDubins *state_initial = new StateDubins;
+  State *state_initial = new State;
 
   state_initial->state_vars[0] = start.pose.position.x;
   state_initial->state_vars[1] = start.pose.position.y;
@@ -181,7 +186,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
     ROS_INFO_THROTTLE(1.0, "Planner iteration : %d", i);
   }
 
-  trajectory_t trajectory_final;
+  Trajectory trajectory_final;
   min_time_reachability.get_solution(trajectory_final);
 
   geometry_msgs::PoseArray path;
@@ -217,7 +222,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
 
   return true;
 }
-}
+} // namespace smp_ros
 
 PLUGINLIB_EXPORT_CLASS(smp_ros::RRTStarDubinsGlobalPlanner,
                        nav_core::BaseGlobalPlanner)

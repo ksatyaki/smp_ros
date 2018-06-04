@@ -73,8 +73,8 @@ class Base {
   using model_checker_t =
       model_checkers::Base<State, Input, VertexData, EdgeData>;
 
-  std::function<int(vertex_t *)> vertex_update_function_t;
-  std::function<int(edge_t *)> edge_update_func_t;
+  using vertex_update_func_t = std::function<int(vertex_t *)>;
+  using edge_update_func_t = std::function<int(edge_t *)>;
 
   std::list<vertex_update_func_t> list_update_insert_vertex_functions;
   std::list<vertex_update_func_t> list_update_delete_vertex_functions;
@@ -162,8 +162,8 @@ public:
   */
   std::list<vertex_t *> list_vertices;
 
-  planner();
-  ~planner();
+  Base();
+  virtual ~Base();
 
   /**
    * \brief A constructor that can initialize all the components
@@ -174,9 +174,9 @@ public:
    * @param collision_checker_in The collision checker component
    * @param model_checker_in The model checker component
    */
-  planner(sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
-          extender_t &extender_in, collision_checker_t &collision_checker_in,
-          model_checker_t &model_checker_in);
+  Base(sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
+       extender_t &extender_in, collision_checker_t &collision_checker_in,
+       model_checker_t &model_checker_in);
 
   /**
    * @name Vertex and edge handlers
@@ -493,8 +493,6 @@ public:
    */
   int register_new_update_function_edge_delete(
       edge_update_func_t edge_update_func_in);
-
-  //@}
 };
 } // namespace planners
 } // namespace smp

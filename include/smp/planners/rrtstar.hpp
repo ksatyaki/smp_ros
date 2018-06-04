@@ -31,38 +31,6 @@
 
 namespace smp {
 
-//! Vertex data structure for the RRT* algorithm.
-/*!
-  The RRT* algorithm requires the vertex data to include a variable
-  that stores the cost to get the vertex from the root node.This class
-  implements such a data structure .The user can directly use this
-  data structure for implementation either as is, or a derived class
-  that inherits from this class. Alternatively, the user can generate
-  another edge data class that includes the edge_cost variable.
-*/
-class RRTStarVertexData {
-
-public:
-  //! Total cost to get to this particular vertex.
-  double total_cost;
-};
-
-//! Edge data for the RRT* algorithm.
-/*!
-  The RRT* algorithm requires the edge data to include a variable
-  that stores the cost to traverse that particular edge. This class
-  implements such a data structure. The user can directly use this
-  data structure for implementation either as is, or a derived class
-  that inherits from this class. Alternatively, the user can generate
-another edge data class that includes the edge_cost variable.
-*/
-class RRTStarEdgeData {
-
-public:
-  //! The cost to traverse this particular trajectory.
-  double edge_cost;
-};
-
 namespace planners {
 //! RRT* algorithm
 /*!
@@ -71,27 +39,29 @@ namespace planners {
 
   \ingroup planners
 */
-template <class State, class Input, int NUM_DIMENSIONS>
-class RRTStar : public BaseIncremental<State, Input, RRTStarVertexData,
-                                       RRTStarEdgeData, NUM_DIMENSIONS> {
+template <class State, class Input, class VertexData, class EdgeData,
+          int NUM_DIMENSIONS>
+class RRTStar : public BaseIncremental<State, Input, VertexData, EdgeData,
+                                       NUM_DIMENSIONS> {
 
-  using vertex_t = Vertex<State, Input, RRTStarVertexData, RRTStarEdgeData>;
-  using edge_t = Edge<State, Input, RRTStarVertexData, RRTStarEdgeData>;
+  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
+  using edge_t = Edge<State, Input, VertexData, EdgeData>;
 
   using trajectory_t = Trajectory<State, Input>;
   using sampler_t = samplers::Base<State>;
   using distance_evaluator_t =
-      distance_evaluators::Base<State, Input, RRTStarVertexData,
-                                RRTStarEdgeData>;
+      distance_evaluators::Base<State, Input, VertexData, EdgeData>;
   using extender_t = extenders::Base<State, Input>;
   using collision_checker_t = collision_checkers::Base<State, Input>;
   using model_checker_t =
-      model_checkers::Base<State, Input, RRTStarVertexData, RRTStarEdgeData>;
+      model_checkers::Base<State, Input, VertexData, EdgeData>;
+  using cost_evaluator_t =
+      cost_evaluators::Base<State, Input, VertexData, EdgeData>;
 
 private:
   // This function adds the given state to the beginning of the tracjetory and
   // calls the collision checker.
-  int check_extended_trajectory_for_collision(state_t *state,
+  int check_extended_trajectory_for_collision(State *state,
                                               trajectory_t *trajectory) {
 
     trajectory->list_states.push_front(state);
@@ -197,7 +167,7 @@ planner is
    *
    * @returns Returns 1 for success, and a non-positive number for failure.
    */
-  int initialize(state_t *initial_state_in = 0);
+  int initialize(State *initial_state_in = 0);
 
   float get_planning_time();
 

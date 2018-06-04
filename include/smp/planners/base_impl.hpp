@@ -21,14 +21,15 @@
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::Base() {
+smp::planners::Base<State, Input, VertexData, EdgeData,
+                    NUM_DIMENSIONS>::Base() {
   list_vertices.clear();
   num_vertices = 0;
 }
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::Base(
+smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::Base(
     sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
     extender_t &extender_in, collision_checker_t &collision_checker_in,
     model_checker_t &model_checker_in)
@@ -42,8 +43,8 @@ smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::Base(
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-smp::planners::Base<State, Input, VertexData,
-                    EdgeData.NUM_DIMENSIONS>::~Base() {
+smp::planners::Base<State, Input, VertexData, EdgeData,
+                    NUM_DIMENSIONS>::~Base() {
 
   initialize(); // run the initialization function that clears up
                 //     the memory occupied by the graph.
@@ -51,8 +52,8 @@ smp::planners::Base<State, Input, VertexData,
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData,
-                        EdgeData.NUM_DIMENSIONS>::initialize() {
+int smp::planners::Base<State, Input, VertexData, EdgeData,
+                        NUM_DIMENSIONS>::initialize() {
 
   // Delete all edges and vertices
   for (typename std::list<vertex_t *>::iterator iter_vertex =
@@ -79,8 +80,8 @@ int smp::planners::Base<State, Input, VertexData,
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
-    insert_vertex(vertex_t *vertex_in) {
+int smp::planners::Base<State, Input, VertexData, EdgeData,
+                        NUM_DIMENSIONS>::insert_vertex(vertex_t *vertex_in) {
 
   // insert the vertex to the list of vertices
   list_vertices.push_back(vertex_in);
@@ -94,10 +95,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 #endif
 
   // UPDATE ALL COMPONENTS
-  sampler.sm_update_insert_vertex(vertex_in);
   distance_evaluator.de_update_insert_vertex(vertex_in);
-  extender.ex_update_insert_vertex(vertex_in);
-  collision_checker.cc_update_insert_vertex(vertex_in);
   model_checker.mc_update_insert_vertex(vertex_in);
 
   // Run all the update functions
@@ -113,14 +111,11 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
-    delete_vertex(vertex_t *vertex_in) {
+int smp::planners::Base<State, Input, VertexData, EdgeData,
+                        NUM_DIMENSIONS>::delete_vertex(vertex_t *vertex_in) {
 
   // UPDATE ALL COMPONENTS
-  sampler.sm_update_delete_vertex(vertex_in);
   distance_evaluator.de_update_delete_vertex(vertex_in);
-  extender.ex_update_delete_vertex(vertex_in);
-  collision_checker.cc_update_delete_vertex(vertex_in);
   model_checker.mc_update_delete_vertex(vertex_in);
 
   // Run all the update functions
@@ -171,9 +166,10 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
-    insert_edge(vertex_t *vertex_src_in, edge_t *edge_in,
-                vertex_t *vertex_dst_in) {
+int smp::planners::Base<State, Input, VertexData, EdgeData,
+                        NUM_DIMENSIONS>::insert_edge(vertex_t *vertex_src_in,
+                                                     edge_t *edge_in,
+                                                     vertex_t *vertex_dst_in) {
 
   // WARNING: Overriding pointed data. May cause memory leaks.
   edge_in->vertex_src = vertex_src_in;
@@ -183,10 +179,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
   vertex_dst_in->incoming_edges.push_back(edge_in);
 
   // UPDATE ALL COMPONENTS
-  sampler.sm_update_insert_edge(edge_in);
   distance_evaluator.de_update_insert_edge(edge_in);
-  extender.ex_update_insert_edge(edge_in);
-  collision_checker.cc_update_insert_edge(edge_in);
   model_checker.mc_update_insert_edge(edge_in);
 
   // Run all the update functions
@@ -201,14 +194,11 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData,
-                        EdgeData.NUM_DIMENSIONS>::delete_edge(edge_t *edge_in) {
+int smp::planners::Base<State, Input, VertexData, EdgeData,
+                        NUM_DIMENSIONS>::delete_edge(edge_t *edge_in) {
 
   // UPDATE ALL COMPONENTS
-  sampler.sm_update_delete_edge(edge_in);
   distance_evaluator.de_update_delete_edge(edge_in);
-  extender.ex_update_delete_edge(edge_in);
-  collision_checker.cc_update_delete_edge(edge_in);
   model_checker.mc_update_delete_edge(edge_in);
 
   // Run all the update functions
@@ -228,7 +218,7 @@ int smp::planners::Base<State, Input, VertexData,
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     insert_trajectory(vertex_t *vertex_src_in, trajectory_t *trajectory_in,
                       std::list<State *> *intermediate_vertices_in,
                       vertex_t *vertex_dst_in) {
@@ -263,7 +253,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     insert_trajectories(vertex_t *vertex_src_in,
                         std::list<trajectory_t *> *list_trajectories_in,
                         vertex_t *vertex_dst_in) {
@@ -318,8 +308,8 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
-    init_sampler(sampler_t &sampler_in) {
+int smp::planners::Base<State, Input, VertexData, EdgeData,
+                        NUM_DIMENSIONS>::init_sampler(sampler_t &sampler_in) {
 
   sampler = sampler_in;
 
@@ -328,7 +318,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     init_distance_evaluator(distance_evaluator_t &distance_evaluator_in) {
 
   distance_evaluator = distance_evaluator_in;
@@ -338,7 +328,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     init_extender(extender_t &extender_in) {
 
   extender = extender_in;
@@ -348,7 +338,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     init_collision_checker(collision_checker_t &collision_checker_in) {
 
   collision_checker = collision_checker_in;
@@ -358,7 +348,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     init_model_checker(model_checker_t &model_checker_in) {
 
   model_checker = model_checker_in;
@@ -368,7 +358,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     clear_update_function_list_vertex_insert() {
 
   list_update_insert_vertex_functions.clear();
@@ -378,9 +368,9 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     register_new_update_function_vertex_insert(
-        vertex_update_func_t *vertex_update_func_in) {
+        vertex_update_func_t vertex_update_func_in) {
 
   list_update_insert_vertex_functions.push_back(vertex_update_func_in);
 
@@ -389,7 +379,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     clear_update_function_list_vertex_delete() {
 
   list_update_delete_vertex_functions.clear();
@@ -399,9 +389,9 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     register_new_update_function_vertex_delete(
-        vertex_update_func_t *vertex_update_func_in) {
+        vertex_update_func_t vertex_update_func_in) {
 
   list_update_delete_vertex_functions.push_back(vertex_update_func_in);
 
@@ -410,7 +400,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     clear_update_function_list_edge_insert() {
 
   list_update_insert_edge_functions.clear();
@@ -420,9 +410,9 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     register_new_update_function_edge_insert(
-        edge_update_func_t *edge_update_func_in) {
+        edge_update_func_t edge_update_func_in) {
 
   list_update_insert_edge_functions.push_back(edge_update_func_in);
 
@@ -431,7 +421,7 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     clear_update_function_list_edge_delete() {
 
   list_update_delete_edge_functions.clear();
@@ -441,9 +431,9 @@ int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
 
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, VertexData, EdgeData.NUM_DIMENSIONS>::
+int smp::planners::Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
     register_new_update_function_edge_delete(
-        edge_update_func_t *edge_update_func_in) {
+        edge_update_func_t edge_update_func_in) {
 
   list_update_delete_edge_functions.push_back(edge_update_func_in);
 

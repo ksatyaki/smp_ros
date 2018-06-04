@@ -15,7 +15,6 @@ oscillation_timeout: 20.0
 oscillation_distance: 0.2
 
 # local planner - default is trajectory rollout
-base_local_planner: "teb_local_planner/TebLocalPlannerROS"
 base_global_planner: "smp_ros/RRTStarDubinsGlobalPlanner"
 recovery_behavior_enabled: false
 #recovery_behaviors:

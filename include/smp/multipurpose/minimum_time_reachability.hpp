@@ -31,38 +31,12 @@
 #include <smp/model_checkers/base.hpp>
 #include <smp/planners/rrtstar.hpp>
 #include <smp/region.hpp>
+#include <smp/types.hpp>
 
 #include <array>
 #include <functional>
 
 namespace smp {
-namespace multipurpose {
-
-//! Vertex data for minimum-time reachability.
-/*! This data structure is attached to each vertex in the graph maintained by
-  the planner algorithm. The data structure includes two variables. One variable
-  indicates whether the associated vertex lies inside the goal region. Another
-  variables keeps track of the cost to reach this particular vertex starting
-  from the root vertex. The latter variable is particularly created to work with
-  teh RRT* algorithm.
-*/
-class MTRVertexData : public RRTStarVertexData {
-
-public:
-  //! Reachability of the goal region.
-  /*!
-    This variable that indicates whether the associated vertex
-    state is inside the goal region.
-  */
-  bool reaches_goal;
-};
-
-//! Edge data for minimum-time reachability.
-/*!
-  This empty class is implemented for the sake of completeness.
-*/
-class MTREdgeData : public RRTStarEdgeData {};
-} // namespace multipurpose
 
 //! A combination of the minimum-time cost evaluator and the reachability model
 //! checker
@@ -75,11 +49,12 @@ class MTREdgeData : public RRTStarEdgeData {};
   \ingroup model_checkers
   \ingroup cost_evaluators
 */
+namespace multipurpose {
 
 template <class State, class Input, int NUM_DIMENSIONS>
 class MinimumTimeReachability
-    : public model_checker_base<State, Input, MTRVertexData, MTREdgeData>,
-      public cost_evaluator_base<State, Input, MTRVertexData, MTREdgeData> {
+    : public model_checkers::Base<State, Input, MTRVertexData, MTREdgeData>,
+      public cost_evaluators::Base<State, Input, MTRVertexData, MTREdgeData> {
 
   using vertex_data_t = MTRVertexData;
   using edge_data_t = MTREdgeData;
@@ -90,16 +65,16 @@ class MinimumTimeReachability
   using trajectory_t = Trajectory<State, Input>;
   using region_t = Region<NUM_DIMENSIONS>;
 
-  using update_function_t = std::function<int(trajectory_t *)>;
+  using update_func_t = std::function<int(trajectory_t *)>;
   //  typedef int (*update_func_t)(trajectory_t *);
 
   using distance_function_t = std::function<std::array<double, NUM_DIMENSIONS>(
       const std::array<double, NUM_DIMENSIONS> &,
       const std::array<double, NUM_DIMENSIONS> &)>;
 
-  using cost_function_t = std::function<double(state_t *state_initial_in,
-                                               trajectory_t *trajectory_in,
-                                               state_t *state_final_in)>;
+  using cost_function_t =
+      std::function<double(State *state_initial_in, trajectory_t *trajectory_in,
+                           State *state_final_in)>;
   distance_function_t distance_function;
 
   cost_function_t cost_function;
@@ -164,13 +139,13 @@ public:
 
   int get_solution(trajectory_t &trajectory_out);
 
-  double evaluate_cost_trajectory(state_t *state_initial_in,
+  double evaluate_cost_trajectory(State *state_initial_in,
                                   trajectory_t *trajectory_in,
-                                  state_t *state_final_in = 0);
+                                  State *state_final_in = 0);
 
-  double default_cost_function(state_t *state_initial_in,
+  double default_cost_function(State *state_initial_in,
                                trajectory_t *trajectory_in,
-                               state_t *state_final_in);
+                               State *state_final_in);
 
   /**
    * \brief Returns the cost of the best trajectory.
@@ -201,9 +176,8 @@ public:
    *
    * Whenever an optimizing motion planning algorithm using this component finds
    * a better trajectory, this component calls a list of functions that are
-   * registered
-   * for this call back. This method registers a new update function, i.e., adds
-   * the function given in the argument to the appropriate list.
+   * registered for this call back. This method registers a new update function,
+   * i.e., adds the function given in the argument to the appropriate list.
    *
    * @returns Returns 1 if succcess, and a non-positive value to indicate error.
    */
@@ -214,7 +188,7 @@ template <int NUM_DIMENSIONS>
 std::array<double, NUM_DIMENSIONS>
 default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
                           const std::array<double, NUM_DIMENSIONS> &goal);
-} // namespace smp
+} // namespace multipurpose
 } // namespace smp
 
 #include <smp/multipurpose/minimum_time_reachability_impl.hpp>

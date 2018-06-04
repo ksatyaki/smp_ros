@@ -21,9 +21,9 @@
 #define _SMP_MINIMUM_TIME_REACHABILITY_HPP_
 
 template <int NUM_DIMENSIONS>
-std::array<double, NUM_DIMENSIONS>
-smp::default_distance_function(const std::array<double, NUM_DIMENSIONS> &state,
-                               const std::array<double, NUM_DIMENSIONS> &goal) {
+std::array<double, NUM_DIMENSIONS> smp::multipurpose::default_distance_function(
+    const std::array<double, NUM_DIMENSIONS> &state,
+    const std::array<double, NUM_DIMENSIONS> &goal) {
   std::array<double, NUM_DIMENSIONS> result;
   for (int i = 0; i < state.size(); i++) {
     result[i] = state[i] - goal[i];

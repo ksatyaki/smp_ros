@@ -41,7 +41,8 @@ namespace planners {
 */
 template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
-class BaseIncremental : public Base<typeparams> {
+class BaseIncremental
+    : public Base<State, Input, VertexData, EdgeData, NUM_DIMENSIONS> {
 
   using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
   using edge_t = Edge<State, Input, VertexData, EdgeData>;

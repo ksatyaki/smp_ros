@@ -52,7 +52,7 @@ template <class State, class Input, class VertexData, class EdgeData,
           int NUM_DIMENSIONS>
 int smp::planners::BaseIncremental<
     State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::initialize(state_t *initial_state_in) {
+    NUM_DIMENSIONS>::initialize(State *initial_state_in) {
 
   // This function deletes all existing vertices
   // in the graph, including the root vertex.

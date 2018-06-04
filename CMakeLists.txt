@@ -43,13 +43,13 @@ add_library(smp
   src/smp/extenders_posq.cpp)
 
 # Not a runtime test. Only testing compilation.
-add_executable(test_collision_checkers src/tests/test_collision_checkers.cpp)
-add_executable(test_dist src/tests/test_distance_evaluators.cpp)
+# add_executable(test_collision_checkers src/tests/test_collision_checkers.cpp)
+# add_executable(test_dist src/tests/test_distance_evaluators.cpp)
 
-target_link_libraries(test_collision_checkers ${MRPT_LIBRARIES})
-target_link_libraries(test_dist smp_ros_kdtree smp)
-#add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
-#target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+# target_link_libraries(test_collision_checkers ${MRPT_LIBRARIES})
+# target_link_libraries(test_dist smp_ros_kdtree smp)
+add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
+target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree smp ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
 
 #install(TARGETS smp_ros_kdtree smp_ros_external rrtstar_dubins_global_planner
 #  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

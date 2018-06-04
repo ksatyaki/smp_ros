@@ -46,7 +46,7 @@ class Parameters {
   int dimension{3};
 
   // Maximum radius in the Near vertices computation.
-  int max_radius{10.0};
+  double max_radius{10.0};
 
   // The fixed radius parameter of the related feature.
   double fixed_radius{-1.0};
