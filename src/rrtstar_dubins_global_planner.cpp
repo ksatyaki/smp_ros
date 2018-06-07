@@ -85,11 +85,9 @@ void RRTStarDubinsGlobalPlanner::initialize(
   }
 
   // TODO: Inflation radius and footprint must be configurable.
-  // sampler can't be std::shared_ptr
-  collision_checker = std::shared_ptr<
-      smp::collision_checkers::MultipleCirclesMRPT<State, Input>>(
-      new smp::collision_checkers::MultipleCirclesMRPT<State, Input>(
-          map, 0.15, footprint));
+  collision_checker = std::make_shared<
+      smp::collision_checkers::MultipleCirclesMRPT<State, Input>>(map, 0.15,
+                                                                  footprint);
 
   // Sampler support should also be configurable.
   smp::Region<3> sampler_support;
@@ -98,7 +96,7 @@ void RRTStarDubinsGlobalPlanner::initialize(
   sampler_support.center[1] = 0.0;
   sampler_support.size[1] = 10.0;
   sampler_support.center[2] = 0.0;
-  sampler_support.size[2] = 2*3.14;
+  sampler_support.size[2] = 2 * 3.14;
   sampler.set_support(sampler_support);
 }
 
