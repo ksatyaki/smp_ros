@@ -52,15 +52,11 @@ namespace smp {
 namespace multipurpose {
 
 template <class State, class Input, int NUM_DIMENSIONS>
-class MinimumTimeReachability
-    : public model_checkers::Base<State, Input, MTRVertexData, MTREdgeData>,
-      public cost_evaluators::Base<State, Input, MTRVertexData, MTREdgeData> {
+class MinimumTimeReachability : public model_checkers::Base<State, Input>,
+                                public cost_evaluators::Base<State, Input> {
 
-  using vertex_data_t = MTRVertexData;
-  using edge_data_t = MTREdgeData;
-
-  using edge_t = Edge<State, Input, MTRVertexData, MTREdgeData>;
-  using vertex_t = Vertex<State, Input, MTRVertexData, MTREdgeData>;
+  using edge_t = Edge<State, Input>;
+  using vertex_t = Vertex<State, Input>;
 
   using trajectory_t = Trajectory<State, Input>;
   using region_t = Region<NUM_DIMENSIONS>;

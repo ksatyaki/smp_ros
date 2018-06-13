@@ -41,11 +41,11 @@ namespace distance_evaluators {
 
   \ingroup distance_evaluators_base
 */
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 class Base {
 
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
-  using edge_t = Edge<State, Input, VertexData, EdgeData>;
+  using vertex_t = Vertex<State, Input>;
+  using edge_t = Edge<State, Input>;
 
 public:
   virtual ~Base(){};

@@ -37,11 +37,11 @@ namespace model_checkers {
 
   \ingroup model_checkers_base
 */
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 class Base {
 
-  using edge_t = Edge<State, Input, VertexData, EdgeData>;
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
+  using edge_t = Edge<State, Input>;
+  using vertex_t = Vertex<State, Input>;
   using trajectory_t = Trajectory<State, Input>;
 
 public:

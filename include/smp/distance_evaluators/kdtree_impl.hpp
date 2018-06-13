@@ -19,10 +19,8 @@
 #ifndef _SMP_DISTANCE_EVALUATOR_KDTREE_HPP_
 #define _SMP_DISTANCE_EVALUATOR_KDTREE_HPP_
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData,
-                                 NUM_DIMENSIONS>::KDTree() {
+template <class State, class Input, int NUM_DIMENSIONS>
+smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::KDTree() {
 
   kdtree = kd_create(NUM_DIMENSIONS);
 
@@ -33,19 +31,15 @@ smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData,
     weights[i] = 1.0;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData,
-                                 NUM_DIMENSIONS>::~KDTree() {
+template <class State, class Input, int NUM_DIMENSIONS>
+smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::~KDTree() {
 
   kd_free(kdtree);
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::de_update_insert_vertex(vertex_t *vertex_in) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::
+    de_update_insert_vertex(vertex_t *vertex_in) {
 
   State *state_in = vertex_in->state;
 
@@ -60,40 +54,33 @@ int smp::distance_evaluators::KDTree<
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
+template <class State, class Input, int NUM_DIMENSIONS>
 int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::de_update_insert_edge(edge_t *edge_in) {
+    State, Input, NUM_DIMENSIONS>::de_update_insert_edge(edge_t *edge_in) {
 
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::de_update_delete_vertex(vertex_t *vertex_in) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::
+    de_update_delete_vertex(vertex_t *vertex_in) {
 
   vertex_deleted = true;
 
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
+template <class State, class Input, int NUM_DIMENSIONS>
 int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::de_update_delete_edge(edge_t *edge_in) {
+    State, Input, NUM_DIMENSIONS>::de_update_delete_edge(edge_t *edge_in) {
 
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
+template <class State, class Input, int NUM_DIMENSIONS>
 int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::find_nearest_vertex(State *state_in, void **data_out) {
+    State, Input, NUM_DIMENSIONS>::find_nearest_vertex(State *state_in,
+                                                       void **data_out) {
 
   if (vertex_deleted) {
     if (list_vertices) {
@@ -127,12 +114,10 @@ int smp::distance_evaluators::KDTree<
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::find_near_vertices_r(State *state_in, double radius_in,
-                                          std::list<void *> *list_data_out) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::
+    find_near_vertices_r(State *state_in, double radius_in,
+                         std::list<void *> *list_data_out) {
 
   if (vertex_deleted) {
     if (list_vertices) {
@@ -164,20 +149,16 @@ int smp::distance_evaluators::KDTree<
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::find_near_vertices_k(State *state_in, int k_in,
-                                          std::list<void *> *list_data_out) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::
+    find_near_vertices_k(State *state_in, int k_in,
+                         std::list<void *> *list_data_out) {
 
   return 0;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData,
-                                     NUM_DIMENSIONS>::
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::
     set_list_vertices(std::list<vertex_t *> *list_vertices_in) {
 
   list_vertices = list_vertices_in;
@@ -185,11 +166,9 @@ int smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData,
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
+template <class State, class Input, int NUM_DIMENSIONS>
 int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::reconstruct_kdtree_from_vertex_list() {
+    State, Input, NUM_DIMENSIONS>::reconstruct_kdtree_from_vertex_list() {
 
   // std::cout << "Reconstructing the kdtree" << std::endl;
 
@@ -220,11 +199,9 @@ int smp::distance_evaluators::KDTree<
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::distance_evaluators::KDTree<
-    State, Input, VertexData, EdgeData,
-    NUM_DIMENSIONS>::set_weights(double weights_in[NUM_DIMENSIONS]) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::distance_evaluators::KDTree<State, Input, NUM_DIMENSIONS>::set_weights(
+    double weights_in[NUM_DIMENSIONS]) {
 
   for (int i = 0; i < NUM_DIMENSIONS; i++) {
     if (weights_in[i] >= 0.0) {

@@ -46,8 +46,6 @@
 // State, input, vertex_data, and edge_data definitions
 using State = smp::StateDubins;
 using Input = smp::InputDubins;
-using VertexData = smp::MTRVertexData;
-using EdgeData = smp::MTREdgeData;
 using Trajectory = smp::Trajectory<State, Input>;
 
 namespace smp_ros {
@@ -58,7 +56,7 @@ private:
   ros::NodeHandle nh;
   smp::samplers::Uniform<State, 3> sampler;
   smp::extenders::Dubins extender;
-  std::shared_ptr<smp::collision_checkers::MultipleCirclesMRPT<State, Input>>
+  std::shared_ptr<smp::collision_checkers::MultipleCirclesMRPT<State>>
       collision_checker;
 
   ros::Publisher graph_pub;
@@ -89,9 +87,9 @@ public:
 std::array<double, 3> distanceBetweenStates(const std::array<double, 3> &state,
                                             const std::array<double, 3> &goal);
 
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 void graphToMsg(ros::NodeHandle &nh, geometry_msgs::PoseArray &graph,
-                smp::Vertex<State, Input, VertexData, EdgeData> *root) {
+                smp::Vertex<State, Input> *root) {
   geometry_msgs::Pose p;
   p.position.x = root->state->state_vars[0];
   p.position.y = root->state->state_vars[1];

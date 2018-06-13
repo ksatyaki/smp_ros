@@ -19,37 +19,30 @@
 #ifndef _SMP_RRTSTAR_HPP_
 #define _SMP_RRTSTAR_HPP_
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-smp::planners::RRTStar<State, Input, VertexData, EdgeData,
-                       NUM_DIMENSIONS>::RRTStar() {
+template <class State, class Input, int NUM_DIMENSIONS>
+smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::RRTStar() {
   cost_evaluator = NULL;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-smp::planners::RRTStar<State, Input, VertexData, EdgeData,
-                       NUM_DIMENSIONS>::~RRTStar() {}
+template <class State, class Input, int NUM_DIMENSIONS>
+smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::~RRTStar() {}
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-smp::planners::RRTStar<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
-    RRTStar(sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
-            extender_t &extender_in, collision_checker_t &collision_checker_in,
-            model_checker_t &model_checker_in,
-            cost_evaluator_t &cost_evaluator_in)
-    : BaseIncremental<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>(
+template <class State, class Input, int NUM_DIMENSIONS>
+smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::RRTStar(
+    sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
+    extender_t &extender_in, collision_checker_t &collision_checker_in,
+    model_checker_t &model_checker_in, cost_evaluator_t &cost_evaluator_in)
+    : BaseIncremental<State, Input, NUM_DIMENSIONS>(
           sampler_in, distance_evaluator_in, extender_in, collision_checker_in,
           model_checker_in),
       cost_evaluator(cost_evaluator_in) {}
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::planners::RRTStar<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
-    initialize(State *initial_state_in) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::initialize(
+    State *initial_state_in) {
 
-  this->BaseIncremental<State, Input, VertexData, EdgeData,
-                        NUM_DIMENSIONS>::initialize(initial_state_in);
+  this->BaseIncremental<State, Input, NUM_DIMENSIONS>::initialize(
+      initial_state_in);
 
   this->root_vertex->data.total_cost = 0;
 
@@ -58,20 +51,18 @@ int smp::planners::RRTStar<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::planners::RRTStar<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
-    init_cost_evaluator(cost_evaluator_t &cost_evaluator_in) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::init_cost_evaluator(
+    cost_evaluator_t &cost_evaluator_in) {
 
   cost_evaluator = cost_evaluator_in;
 
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::planners::RRTStar<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
-    propagate_cost(vertex_t *vertex_in, double total_cost_new) {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::propagate_cost(
+    vertex_t *vertex_in, double total_cost_new) {
 
   // Update the cost of this vertex
   vertex_in->data.total_cost = total_cost_new;
@@ -95,17 +86,14 @@ int smp::planners::RRTStar<State, Input, VertexData, EdgeData, NUM_DIMENSIONS>::
   return 1;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-float smp::planners::RRTStar<State, Input, VertexData, EdgeData,
+template <class State, class Input, int NUM_DIMENSIONS>
+float smp::planners::RRTStar<State, Input,
                              NUM_DIMENSIONS>::get_planning_time() {
   return planning_time;
 }
 
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-int smp::planners::RRTStar<State, Input, VertexData, EdgeData,
-                           NUM_DIMENSIONS>::iteration() {
+template <class State, class Input, int NUM_DIMENSIONS>
+int smp::planners::RRTStar<State, Input, NUM_DIMENSIONS>::iteration() {
 
   auto start_time = clock.now();
   // TODO: Check whether the RRTStar is initialized properly (including its base
@@ -114,7 +102,7 @@ int smp::planners::RRTStar<State, Input, VertexData, EdgeData,
   // 1. Sample a new state from the obstacle-free space
   State *state_sample;
   this->sampler.sample(&state_sample);
-  if (this->collision_checker.check_collision_state(state_sample) == 0) {
+  if (this->collision_checker.check_collision(state_sample) == 0) {
     delete state_sample;
 
     auto end_time = clock.now();

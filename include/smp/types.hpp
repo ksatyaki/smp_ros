@@ -6,6 +6,9 @@
   from the root vertex. The latter variable is particularly created to work with
   teh RRT* algorithm.
 */
+
+#pragma once
+
 namespace smp {
 
 //! Vertex data structure for the RRT* algorithm.
@@ -17,11 +20,12 @@ namespace smp {
   that inherits from this class. Alternatively, the user can generate
   another edge data class that includes the edge_cost variable.
 */
-class RRTStarVertexData {
+class VertexData {
 
 public:
   //! Total cost to get to this particular vertex.
   double total_cost;
+  bool reaches_goal;
 };
 
 //! Edge data for the RRT* algorithm.
@@ -33,28 +37,11 @@ public:
   that inherits from this class. Alternatively, the user can generate
 another edge data class that includes the edge_cost variable.
 */
-class RRTStarEdgeData {
+class EdgeData {
 
 public:
   //! The cost to traverse this particular trajectory.
   double edge_cost;
 };
-
-class MTRVertexData : public RRTStarVertexData {
-
-public:
-  //! Reachability of the goal region.
-  /*!
-    This variable that indicates whether the associated vertex
-    state is inside the goal region.
-  */
-  bool reaches_goal;
-};
-
-//! Edge data for minimum-time reachability.
-/*!
-  This empty class is implemented for the sake of completeness.
-*/
-class MTREdgeData : public RRTStarEdgeData {};
 
 } // namespace smp

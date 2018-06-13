@@ -39,24 +39,19 @@ namespace planners {
 
   \ingroup planners
 */
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-class RRTStar : public BaseIncremental<State, Input, VertexData, EdgeData,
-                                       NUM_DIMENSIONS> {
+template <class State, class Input, int NUM_DIMENSIONS>
+class RRTStar : public BaseIncremental<State, Input, NUM_DIMENSIONS> {
 
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
-  using edge_t = Edge<State, Input, VertexData, EdgeData>;
+  using vertex_t = Vertex<State, Input>;
+  using edge_t = Edge<State, Input>;
 
   using trajectory_t = Trajectory<State, Input>;
   using sampler_t = samplers::Base<State>;
-  using distance_evaluator_t =
-      distance_evaluators::Base<State, Input, VertexData, EdgeData>;
+  using distance_evaluator_t = distance_evaluators::Base<State, Input>;
   using extender_t = extenders::Base<State, Input>;
-  using collision_checker_t = collision_checkers::Base<State, Input>;
-  using model_checker_t =
-      model_checkers::Base<State, Input, VertexData, EdgeData>;
-  using cost_evaluator_t =
-      cost_evaluators::Base<State, Input, VertexData, EdgeData>;
+  using collision_checker_t = collision_checkers::Base<State>;
+  using model_checker_t = model_checkers::Base<State, Input>;
+  using cost_evaluator_t = cost_evaluators::Base<State, Input>;
 
 private:
   // This function adds the given state to the beginning of the tracjetory and
@@ -66,7 +61,7 @@ private:
 
     trajectory->list_states.push_front(state);
     int collision_check =
-        this->collision_checker.check_collision_trajectory(trajectory);
+        this->collision_checker.check_collision(trajectory->list_states);
     trajectory->list_states.pop_front();
 
     return collision_check;

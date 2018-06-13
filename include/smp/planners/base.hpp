@@ -57,21 +57,17 @@ namespace smp {
   \ingroup planners_base
 */
 namespace planners {
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-class Base {
+template <class State, class Input, int NUM_DIMENSIONS> class Base {
 
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
-  using edge_t = Edge<State, Input, VertexData, EdgeData>;
+  using vertex_t = Vertex<State, Input>;
+  using edge_t = Edge<State, Input>;
 
   using trajectory_t = Trajectory<State, Input>;
   using sampler_t = samplers::Base<State>;
-  using distance_evaluator_t =
-      distance_evaluators::Base<State, Input, VertexData, EdgeData>;
+  using distance_evaluator_t = distance_evaluators::Base<State, Input>;
   using extender_t = extenders::Base<State, Input>;
-  using collision_checker_t = collision_checkers::Base<State, Input>;
-  using model_checker_t =
-      model_checkers::Base<State, Input, VertexData, EdgeData>;
+  using collision_checker_t = collision_checkers::Base<State>;
+  using model_checker_t = model_checkers::Base<State, Input>;
 
   using vertex_update_func_t = std::function<int(vertex_t *)>;
   using edge_update_func_t = std::function<int(edge_t *)>;

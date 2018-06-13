@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include <smp/region.hpp>
 #include <smp/collision_checkers/base.hpp>
+#include <smp/region.hpp>
 
-#include <list>
 #include <cmath>
+#include <list>
 
 namespace smp {
 namespace collision_checkers {
@@ -80,7 +80,7 @@ public:
     }
   }
 
-  int check_collision_state(State *state_in) {
+  int check_collision(State *state_in) {
     if (list_obstacles.size() == 0)
       return 1;
 
@@ -105,25 +105,24 @@ public:
     return 1;
   }
 
-  int check_collision_trajectory(trajectory_t *trajectory_in) {
+  int check_collision(const std::list<State *> &list_states) {
 
     if (list_obstacles.size() == 0)
       return 1;
 
-    if (trajectory_in->list_states.size() == 0)
+    if (list_states.size() == 0)
       return 1;
 
-    typename std::list<State *>::iterator iter =
-        trajectory_in->list_states.begin();
+    typename std::list<State *>::iterator iter = list_states.begin();
 
     State *state_prev = *iter;
 
-    if (this->check_collision_state(state_prev) == 0)
+    if (this->check_collision(state_prev) == 0)
       return 0;
 
     iter++;
 
-    for (; iter != trajectory_in->list_states.end(); iter++) {
+    for (; iter != list_states.end(); iter++) {
 
       State *state_curr = *iter;
 
@@ -176,7 +175,7 @@ public:
         }
       }
 
-      if (check_collision_state(state_curr) == 0) {
+      if (check_collision(state_curr) == 0) {
         return 0;
       }
 
@@ -259,4 +258,3 @@ public:
 };
 } // namespace collision_checkers
 } // namespace smp
-

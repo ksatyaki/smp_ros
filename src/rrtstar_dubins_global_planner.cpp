@@ -85,9 +85,9 @@ void RRTStarDubinsGlobalPlanner::initialize(
   }
 
   // TODO: Inflation radius and footprint must be configurable.
-  collision_checker = std::make_shared<
-      smp::collision_checkers::MultipleCirclesMRPT<State, Input>>(map, 0.15,
-                                                                  footprint);
+  collision_checker =
+      std::make_shared<smp::collision_checkers::MultipleCirclesMRPT<State>>(
+          map, 0.15, footprint);
 
   // Sampler support should also be configurable.
   smp::Region<3> sampler_support;
@@ -105,12 +105,11 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
     const geometry_msgs::PoseStamped &goal,
     std::vector<geometry_msgs::PoseStamped> &plan) {
 
-  smp::distance_evaluators::KDTree<State, Input, VertexData, EdgeData, 3>
-      distance_evaluator;
+  smp::distance_evaluators::KDTree<State, Input, 3> distance_evaluator;
   smp::multipurpose::MinimumTimeReachability<State, Input, 3>
       min_time_reachability;
 
-  smp::planners::RRTStar<State, Input, VertexData, EdgeData, 3> planner(
+  smp::planners::RRTStar<State, Input, 3> planner(
       sampler, distance_evaluator, extender, *collision_checker,
       min_time_reachability, min_time_reachability);
 
@@ -152,7 +151,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
   state_initial->state_vars[2] =
       2 * atan2(start.pose.orientation.z, start.pose.orientation.w);
 
-  if (collision_checker->check_collision_state(state_initial) == 0) {
+  if (collision_checker->check_collision(state_initial) == 0) {
     ROS_INFO("Start state is in collision. Planning failed.");
     return false;
   } else

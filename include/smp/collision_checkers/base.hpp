@@ -44,9 +44,7 @@ namespace collision_checkers {
 
   \ingroup collision_checkers_base
 */
-template <class State, class Input> class Base {
-
-  using trajectory_t = Trajectory<State, Input>;
+template <class State> class Base {
 
 public:
   virtual ~Base(){};
@@ -59,7 +57,7 @@ public:
    *         trajectory collides with an obstacle, and a non-positive
    *         if error.
    */
-  virtual int check_collision_state(State *state_in) = 0;
+  virtual int check_collision(State *state_in) = 0;
 
   /**
    * \brief Checks whether a given trajectory is collision free
@@ -70,7 +68,7 @@ public:
    *         trajectory collides with an obstacle, and a non-positive
    *         if error.
    */
-  virtual int check_collision_trajectory(trajectory_t *trajectory_in) = 0;
+  virtual int check_collision(const std::list<State *> &list_states) = 0;
 };
 } // namespace collision_checkers
 } // namespace smp

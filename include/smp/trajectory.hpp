@@ -18,8 +18,7 @@
   *
   */
 
-#ifndef _SMP_TRAJECTORY_H_
-#define _SMP_TRAJECTORY_H_
+#pragma once
 
 #include <list>
 
@@ -87,4 +86,3 @@ public:
 };
 } // namespace smp
 
-#endif

@@ -41,13 +41,11 @@ namespace distance_evaluators {
 
   \ingroup distance_evaluators
 */
-template <class State, class Input, class VertexData, class EdgeData,
-          int NUM_DIMENSIONS>
-class KDTree
-    : public Base<State, Input, VertexData, EdgeData> {
+template <class State, class Input, int NUM_DIMENSIONS>
+class KDTree : public Base<State, Input> {
 
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
-  using edge_t = Edge<State, Input, VertexData, EdgeData>;
+  using vertex_t = Vertex<State, Input>;
+  using edge_t = Edge<State, Input>;
 
   typedef struct kdtree kdtree_t;
   typedef struct kdres kdres_t;
@@ -122,7 +120,6 @@ public:
   int set_weights(double weights_in[NUM_DIMENSIONS]);
 };
 } // namespace distance_evaluators
-}
+} // namespace smp
 
 #include <smp/distance_evaluators/kdtree_impl.hpp>
-

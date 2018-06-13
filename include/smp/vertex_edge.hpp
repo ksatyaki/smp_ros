@@ -24,9 +24,9 @@
   *
   */
 
-#ifndef _SMP_VERTEX_EDGE_H_
-#define _SMP_VERTEX_EDGE_H_
+#pragma once
 
+#include <smp/types.hpp>
 #include <smp/trajectory.hpp>
 
 #include <list>
@@ -43,9 +43,9 @@
 
 namespace smp {
 
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 class Vertex;
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 class Edge;
 
 //! Vertex data structure of the graph maintained by a planner algorithm
@@ -59,11 +59,11 @@ class Edge;
 
   \ingroup graphs
 */
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 class Vertex {
 
-  using edge_t = Edge<State, Input, VertexData, EdgeData>;
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
+  using edge_t = Edge<State, Input>;
+  using vertex_t = Vertex<State, Input>;
 
 public:
   //! The data that is stored in this vertex
@@ -122,11 +122,11 @@ public:
 /*!
   \ingroup graphs
 */
-template <class State, class Input, class VertexData, class EdgeData>
+template <class State, class Input>
 class Edge {
 
   using trajectory_t = Trajectory<State, Input>;
-  using vertex_t = Vertex<State, Input, VertexData, EdgeData>;
+  using vertex_t = Vertex<State, Input>;
 
 public:
   //! The data that is stored in this vertex.
@@ -161,5 +161,3 @@ public:
   ~Edge() { delete trajectory_edge; }
 };
 } // namespace smp
-
-#endif

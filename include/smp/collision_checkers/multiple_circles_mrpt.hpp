@@ -42,10 +42,7 @@ namespace mm = mrpt::maps;
   Checks for collisions between a robot footprint and the MRPT occupancy map.
   \ingroup collision_checkers
 */
-template <class State, class Input>
-class MultipleCirclesMRPT : public Base<State, Input> {
-
-  using trajectory_t = Trajectory<State, Input>;
+template <class State> class MultipleCirclesMRPT : public Base<State> {
 
   std::shared_ptr<mm::COccupancyGridMap2D> map;
   double inflation_radius;
@@ -60,15 +57,15 @@ public:
 
   inline ~MultipleCirclesMRPT() {}
 
-  int check_collision_state(State *state_in) {
+  int check_collision(State *state_in) {
 
     if (!map) {
-      std::cerr << "[check_collision_state]: NO MAP!\n";
+      std::cerr << "[check_collision]: NO MAP!\n";
       return 1;
     }
 
     if (!robot_footprint) {
-      std::cerr << "[check_collision_state]: NO FOOTPRINT!\n";
+      std::cerr << "[check_collision]: NO FOOTPRINT!\n";
       return 1;
     }
 
@@ -95,24 +92,24 @@ public:
     return 1;
   }
 
-  int check_collision_trajectory(trajectory_t *trajectory_in) {
+  int check_collision(const std::list<State *> &list_states) {
 
     if (!map) {
-      std::cerr << "[check_collision_trajectory]: NO MAP!\n";
+      std::cerr << "[check_collision]: NO MAP!\n";
       return 1;
     }
 
     if (!robot_footprint) {
-      std::cerr << "[check_collision_trajectory]: NO FOOTPRINT!\n";
+      std::cerr << "[check_collision]: NO FOOTPRINT!\n";
       return 1;
     }
 
-    if (trajectory_in->list_states.size() == 0)
+    if (list_states.size() == 0)
       return 1;
 
     // This might be a problem with very thin obstacles. We ignore that for now.
-    for (const auto &iter : trajectory_in->list_states) {
-      if (check_collision_state(iter) == 0) {
+    for (const auto &iter : list_states) {
+      if (check_collision(iter) == 0) {
         // std::cout << "()()()()\n";
         return 0;
       }
