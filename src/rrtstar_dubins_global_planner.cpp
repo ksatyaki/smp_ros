@@ -109,7 +109,7 @@ bool RRTStarDubinsGlobalPlanner::makePlan(
   smp::multipurpose::MinimumTimeReachability<State, Input, 3>
       min_time_reachability;
 
-  smp::planners::RRTStar<State, Input, 3> planner(
+  smp::planners::RRTStar<State, Input> planner(
       sampler, distance_evaluator, extender, *collision_checker,
       min_time_reachability, min_time_reachability);
 

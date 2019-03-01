@@ -39,8 +39,8 @@ namespace planners {
 
   \ingroup planners_base
 */
-template <class State, class Input, int NUM_DIMENSIONS>
-class BaseIncremental : public Base<State, Input, NUM_DIMENSIONS> {
+template <class State, class Input>
+class BaseIncremental : public Base<State, Input> {
 
   using vertex_t = Vertex<State, Input>;
   using edge_t = Edge<State, Input>;

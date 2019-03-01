@@ -15,7 +15,7 @@ oscillation_timeout: 20.0
 oscillation_distance: 0.2
 
 # local planner - default is trajectory rollout
-base_global_planner: "smp_ros/RRTStarDubinsGlobalPlanner"
+base_global_planner: "smp_ros/RRTStarPosQGlobalPlanner"
 recovery_behavior_enabled: false
 #recovery_behaviors:
   #- name: 'super_conservative_reset1'

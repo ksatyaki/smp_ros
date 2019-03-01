@@ -19,6 +19,6 @@
   <depend>mrpt</depend>
 
   <export>
-    <nav_core plugin="${prefix}/rrtstar_dubins_global_planner.xml" />
+    <nav_core plugin="${prefix}/plugins.xml" />
   </export>
 </package>

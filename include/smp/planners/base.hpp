@@ -57,7 +57,7 @@ namespace smp {
   \ingroup planners_base
 */
 namespace planners {
-template <class State, class Input, int NUM_DIMENSIONS> class Base {
+template <class State, class Input> class Base {
 
   using vertex_t = Vertex<State, Input>;
   using edge_t = Edge<State, Input>;

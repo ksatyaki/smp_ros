@@ -42,9 +42,12 @@ template <class State, int NUM_DIMENSIONS> class Uniform : public Base<State> {
 
   region_t support;
 
+  region_t goal_region;
+
+  double goal_bias{0.0};
+
 public:
   Uniform() {
-
     // Initialize the sampling distribution support.
     for (int i = 0; i < NUM_DIMENSIONS; i++) {
       support.center[i] = 0.0;
@@ -52,14 +55,33 @@ public:
     }
   }
 
+  int set_goal_bias(double bias, const Region<NUM_DIMENSIONS> &region_goal) {
+    this->goal_bias = bias;
+    this->goal_region = region_goal;
+    time_t t;
+    srand((unsigned)time(&t));
+    return 1;
+  }
+
   ~Uniform() {}
 
   int sample(State **state_sample_out) {
 
-    if (NUM_DIMENSIONS <= 0)
+    if (NUM_DIMENSIONS <= 0) {
       return 0;
+    }
 
     State *state_new = new State;
+
+    double randnum1 = double(rand()) / double(RAND_MAX);
+
+    if (goal_bias > randnum1) {
+      for (int i = 0; i < NUM_DIMENSIONS; i++)
+        (*state_new)[i] = goal_region.size[i] * rand() / (RAND_MAX + 1.0) -
+                          goal_region.size[i] / 2.0 + goal_region.center[i];
+      *state_sample_out = state_new;
+      return 1;
+    }
 
     // Generate an independent random variable for each axis.
     for (int i = 0; i < NUM_DIMENSIONS; i++)

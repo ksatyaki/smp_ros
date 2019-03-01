@@ -39,8 +39,8 @@ namespace planners {
 
   \ingroup planners
 */
-template <class State, class Input, int NUM_DIMENSIONS>
-class RRTStar : public BaseIncremental<State, Input, NUM_DIMENSIONS> {
+template <class State, class Input>
+class RRTStar : public BaseIncremental<State, Input> {
 
   using vertex_t = Vertex<State, Input>;
   using edge_t = Edge<State, Input>;
@@ -74,7 +74,7 @@ protected:
   /**
    * Total planning time.
    */
-  float planning_time;
+  float planning_time{5.0};
 
   /**
    * A steady clock

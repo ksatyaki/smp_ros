@@ -19,14 +19,13 @@
 #ifndef _SMP_PLANNER_BASE_HPP_
 #define _SMP_PLANNER_BASE_HPP_
 
-template <class State, class Input, int NUM_DIMENSIONS>
-smp::planners::Base<State, Input, NUM_DIMENSIONS>::Base() {
+template <class State, class Input> smp::planners::Base<State, Input>::Base() {
   list_vertices.clear();
   num_vertices = 0;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-smp::planners::Base<State, Input, NUM_DIMENSIONS>::Base(
+template <class State, class Input>
+smp::planners::Base<State, Input>::Base(
     sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
     extender_t &extender_in, collision_checker_t &collision_checker_in,
     model_checker_t &model_checker_in)
@@ -38,15 +37,14 @@ smp::planners::Base<State, Input, NUM_DIMENSIONS>::Base(
   num_vertices = 0;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-smp::planners::Base<State, Input, NUM_DIMENSIONS>::~Base() {
+template <class State, class Input> smp::planners::Base<State, Input>::~Base() {
 
   initialize(); // run the initialization function that clears up
                 //     the memory occupied by the graph.
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::initialize() {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::initialize() {
 
   // Delete all edges and vertices
   for (typename std::list<vertex_t *>::iterator iter_vertex =
@@ -71,9 +69,8 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::initialize() {
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_vertex(
-    vertex_t *vertex_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::insert_vertex(vertex_t *vertex_in) {
 
   // insert the vertex to the list of vertices
   list_vertices.push_back(vertex_in);
@@ -101,9 +98,8 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_vertex(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::delete_vertex(
-    vertex_t *vertex_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::delete_vertex(vertex_t *vertex_in) {
 
   // UPDATE ALL COMPONENTS
   distance_evaluator.de_update_delete_vertex(vertex_in);
@@ -155,9 +151,10 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::delete_vertex(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_edge(
-    vertex_t *vertex_src_in, edge_t *edge_in, vertex_t *vertex_dst_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::insert_edge(vertex_t *vertex_src_in,
+                                                   edge_t *edge_in,
+                                                   vertex_t *vertex_dst_in) {
 
   // WARNING: Overriding pointed data. May cause memory leaks.
   edge_in->vertex_src = vertex_src_in;
@@ -180,9 +177,8 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_edge(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::delete_edge(
-    edge_t *edge_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::delete_edge(edge_t *edge_in) {
 
   // UPDATE ALL COMPONENTS
   distance_evaluator.de_update_delete_edge(edge_in);
@@ -203,8 +199,8 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::delete_edge(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_trajectory(
+template <class State, class Input>
+int smp::planners::Base<State, Input>::insert_trajectory(
     vertex_t *vertex_src_in, trajectory_t *trajectory_in,
     std::list<State *> *intermediate_vertices_in, vertex_t *vertex_dst_in) {
 
@@ -236,8 +232,8 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_trajectory(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_trajectories(
+template <class State, class Input>
+int smp::planners::Base<State, Input>::insert_trajectories(
     vertex_t *vertex_src_in, std::list<trajectory_t *> *list_trajectories_in,
     vertex_t *vertex_dst_in) {
 
@@ -289,17 +285,16 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::insert_trajectories(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_sampler(
-    sampler_t &sampler_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::init_sampler(sampler_t &sampler_in) {
 
   sampler = sampler_in;
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_distance_evaluator(
+template <class State, class Input>
+int smp::planners::Base<State, Input>::init_distance_evaluator(
     distance_evaluator_t &distance_evaluator_in) {
 
   distance_evaluator = distance_evaluator_in;
@@ -307,17 +302,16 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_distance_evaluator(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_extender(
-    extender_t &extender_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::init_extender(extender_t &extender_in) {
 
   extender = extender_in;
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_collision_checker(
+template <class State, class Input>
+int smp::planners::Base<State, Input>::init_collision_checker(
     collision_checker_t &collision_checker_in) {
 
   collision_checker = collision_checker_in;
@@ -325,8 +319,8 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_collision_checker(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_model_checker(
+template <class State, class Input>
+int smp::planners::Base<State, Input>::init_model_checker(
     model_checker_t &model_checker_in) {
 
   model_checker = model_checker_in;
@@ -334,17 +328,17 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::init_model_checker(
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<
-    State, Input, NUM_DIMENSIONS>::clear_update_function_list_vertex_insert() {
+template <class State, class Input>
+int smp::planners::Base<State,
+                        Input>::clear_update_function_list_vertex_insert() {
 
   list_update_insert_vertex_functions.clear();
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::
+template <class State, class Input>
+int smp::planners::Base<State, Input>::
     register_new_update_function_vertex_insert(
         vertex_update_func_t vertex_update_func_in) {
 
@@ -353,17 +347,17 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<
-    State, Input, NUM_DIMENSIONS>::clear_update_function_list_vertex_delete() {
+template <class State, class Input>
+int smp::planners::Base<State,
+                        Input>::clear_update_function_list_vertex_delete() {
 
   list_update_delete_vertex_functions.clear();
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::
+template <class State, class Input>
+int smp::planners::Base<State, Input>::
     register_new_update_function_vertex_delete(
         vertex_update_func_t vertex_update_func_in) {
 
@@ -372,38 +366,36 @@ int smp::planners::Base<State, Input, NUM_DIMENSIONS>::
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<
-    State, Input, NUM_DIMENSIONS>::clear_update_function_list_edge_insert() {
+template <class State, class Input>
+int smp::planners::Base<State,
+                        Input>::clear_update_function_list_edge_insert() {
 
   list_update_insert_edge_functions.clear();
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::
-    register_new_update_function_edge_insert(
-        edge_update_func_t edge_update_func_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::register_new_update_function_edge_insert(
+    edge_update_func_t edge_update_func_in) {
 
   list_update_insert_edge_functions.push_back(edge_update_func_in);
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<
-    State, Input, NUM_DIMENSIONS>::clear_update_function_list_edge_delete() {
+template <class State, class Input>
+int smp::planners::Base<State,
+                        Input>::clear_update_function_list_edge_delete() {
 
   list_update_delete_edge_functions.clear();
 
   return 1;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::Base<State, Input, NUM_DIMENSIONS>::
-    register_new_update_function_edge_delete(
-        edge_update_func_t edge_update_func_in) {
+template <class State, class Input>
+int smp::planners::Base<State, Input>::register_new_update_function_edge_delete(
+    edge_update_func_t edge_update_func_in) {
 
   list_update_delete_edge_functions.push_back(edge_update_func_in);
 

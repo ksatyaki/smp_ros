@@ -20,7 +20,7 @@ find_package(Boost REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES smp_ros_external smp_ros_kdtree rrtstar_dubins_global_planner
+  LIBRARIES smp_external smp_kdtree smp_extenders smp_ros_planners
   CATKIN_DEPENDS geometry_msgs nav_msgs roscpp std_msgs tf nav_core costmap_2d
   DEPENDS Boost MRPT
 )
@@ -31,31 +31,35 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(smp_ros_external
+add_library(smp_external
   src/external_libraries/halton/halton.C
   src/external_libraries/inc_mu_mc/ms.cpp
-  src/external_libraries/inc_mu_mc/pt.cpp
-)
-add_library(smp_ros_kdtree src/external_libraries/kdtree/kdtree.c)
-add_library(smp
+  src/external_libraries/inc_mu_mc/pt.cpp)
+
+add_library(smp_kdtree
+  src/external_libraries/kdtree/kdtree.c)
+
+add_library(smp_extenders
   src/smp/extenders_dubins.cpp
   src/smp/extenders_double_integrator.cpp
   src/smp/extenders_posq.cpp)
 
-# Not a runtime test. Only testing compilation.
-# add_executable(test_collision_checkers src/tests/test_collision_checkers.cpp)
-# add_executable(test_dist src/tests/test_distance_evaluators.cpp)
+add_library(smp_ros_planners
+  src/rrtstar_dubins_global_planner.cpp
+  src/rrtstar_posq_global_planner.cpp)
 
-# target_link_libraries(test_collision_checkers ${MRPT_LIBRARIES})
-# target_link_libraries(test_dist smp_ros_kdtree smp)
-add_library(rrtstar_dubins_global_planner src/rrtstar_dubins_global_planner.cpp)
-target_link_libraries(rrtstar_dubins_global_planner smp_ros_external smp_ros_kdtree smp ${catkin_LIBRARIES} ${MRPT_LIBRARIES})
+target_link_libraries(smp_ros_planners
+  smp_external
+  smp_kdtree
+  smp_extenders
+  ${catkin_LIBRARIES}
+  ${MRPT_LIBRARIES})
 
-#install(TARGETS smp_ros_kdtree smp_ros_external rrtstar_dubins_global_planner
-#  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-#)
+install(TARGETS smp_kdtree smp_external smp_extenders smp_ros_planners
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
@@ -68,16 +72,3 @@ install(DIRECTORY include/smp/
   FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
   PATTERN ".svn" EXCLUDE
 )
-
-#############
-## Testing ##
-#############
-
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_smp_ros.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
-
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)

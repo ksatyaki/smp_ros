@@ -19,36 +19,33 @@
 #ifndef _SMP_PLANNER_INCREMENTAL_HPP_
 #define _SMP_PLANNER_INCREMENTAL_HPP_
 
-template <class State, class Input, int NUM_DIMENSIONS>
-smp::planners::BaseIncremental<State, Input,
-                               NUM_DIMENSIONS>::BaseIncremental() {
+template <class State, class Input>
+smp::planners::BaseIncremental<State, Input>::BaseIncremental() {
 
   root_vertex = 0;
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-smp::planners::BaseIncremental<State, Input,
-                               NUM_DIMENSIONS>::~BaseIncremental() {
+template <class State, class Input>
+smp::planners::BaseIncremental<State, Input>::~BaseIncremental() {
 
   // Note that the root vertex is deleted by the smp_planner class
 }
 
-template <class State, class Input, int NUM_DIMENSIONS>
-smp::planners::BaseIncremental<State, Input, NUM_DIMENSIONS>::BaseIncremental(
+template <class State, class Input>
+smp::planners::BaseIncremental<State, Input>::BaseIncremental(
     sampler_t &sampler_in, distance_evaluator_t &distance_evaluator_in,
     extender_t &extender_in, collision_checker_t &collision_checker_in,
     model_checker_t &model_checker_in)
-    : Base<State, Input, NUM_DIMENSIONS>(sampler_in, distance_evaluator_in,
-                                         extender_in, collision_checker_in,
-                                         model_checker_in) {}
+    : Base<State, Input>(sampler_in, distance_evaluator_in, extender_in,
+                         collision_checker_in, model_checker_in) {}
 
-template <class State, class Input, int NUM_DIMENSIONS>
-int smp::planners::BaseIncremental<State, Input, NUM_DIMENSIONS>::initialize(
+template <class State, class Input>
+int smp::planners::BaseIncremental<State, Input>::initialize(
     State *initial_state_in) {
 
   // This function deletes all existing vertices
   // in the graph, including the root vertex.
-  this->Base<State, Input, NUM_DIMENSIONS>::initialize();
+  this->Base<State, Input>::initialize();
 
   if (initial_state_in == 0) {
     root_vertex = 0;
